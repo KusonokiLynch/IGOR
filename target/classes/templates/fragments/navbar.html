@@ -1,0 +1,21 @@
+<nav th:fragment="navbar" class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <a href="#" class="flex items-center">
+                <img src="/img/logoIGOR.png" alt="Logo IGOR" class="h-10 mr-2">
+                <span class="text-xl font-bold">IGOR</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a class="hover:text-gray-300" th:href="@{/usuarios}">Usuarios</a>
+                <a class="hover:text-gray-300" th:href="@{/proyectos}">Gestión de Proyectos</a>
+                <a class="hover:text-gray-300" th:href="@{/recursos}">Gestión de Recursos</a>
+                <a class="hover:text-gray-300" th:href="@{/clientes}">Gestión de Clientes</a>
+                <a class="hover:text-gray-300" th:href="@{/AnalisisYReportes}">Análisis y Reportes</a>
+                <form th:action="@{/logout}" method="post" class="ml-4">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1 rounded">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>

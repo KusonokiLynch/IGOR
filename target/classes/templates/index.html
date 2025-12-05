@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IGOR — Sistema de Gestión de Proyectos</title>
+  <!-- Tailwind Play CDN (rápido para desarrollo). Para producción, compila Tailwind y elimina este CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="IGOR - Sistema profesional de gestión de proyectos, análisis y recursos">
+</head>
+<body class="antialiased text-slate-700 bg-slate-50">
+  <!-- NAV -->
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-md bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold">IG</div>
+          <div>
+            <h1 class="text-lg font-semibold">IGOR</h1>
+            <p class="text-xs text-slate-400">Gestión & Análisis</p>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#quienes" class="hover:text-slate-900">Quiénes somos</a>
+          <a href="#vision" class="hover:text-slate-900">Visión</a>
+          <a href="#mision" class="hover:text-slate-900">Misión</a>
+          <a href="#modulos" class="hover:text-slate-900">Módulos</a>
+          <a href="#contacto" class="hover:text-slate-900">Contacto</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <!-- Ajusta la ruta de login según tu controlador -->
+          <a th:href="@{/login}" href="/login" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-indigo-600 text-white shadow hover:bg-indigo-700">Iniciar sesión</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16">
+        <div>
+          <h2 class="text-4xl font-extrabold text-slate-900">IGOR — Gestión de proyectos con enfoque en resultados</h2>
+          <p class="mt-4 text-lg text-slate-600">Optimiza recursos, documenta tareas y genera KPIs automáticamente. Plataforma pensada para equipos reales: Director, Supervisor, Trabajador y Cliente.</p>
+
+          <div class="mt-8 flex gap-4">
+            <a th:href="@{/analisis}" href="/analisis" class="px-5 py-3 rounded-md bg-cyan-500 text-white font-medium shadow hover:bg-cyan-600">Ir a Análisis & KPIs</a>
+            <a href="#modulos" class="px-5 py-3 rounded-md border border-slate-200 bg-white hover:bg-slate-50">Ver módulos</a>
+          </div>
+
+          <ul class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600">
+            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Documentación automática de tareas</li>
+            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path></svg> KPIs generados desde registros</li>
+            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path></svg> Gestión de recursos y proyectos</li>
+            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8z"></path></svg> Roles y permisos integrados</li>
+          </ul>
+        </div>
+
+        <div class="relative">
+          <div class="rounded-2xl bg-gradient-to-br from-indigo-50 to-cyan-50 p-1 shadow-lg">
+            <div class="bg-white rounded-2xl p-6">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="dashboard" class="w-full rounded-md shadow-sm object-cover h-64 sm:h-80">
+
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="p-3 rounded-md border border-slate-100 bg-white">
+                  <h4 class="text-sm text-slate-500">Proyectos</h4>
+                  <p class="text-lg font-semibold text-slate-800 mt-1">12</p>
+                </div>
+                <div class="p-3 rounded-md border border-slate-100 bg-white">
+                  <h4 class="text-sm text-slate-500">Tareas pendientes</h4>
+                  <p class="text-lg font-semibold text-slate-800 mt-1">34</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIENES SOMOS / VISION / MISION -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid gap-10 lg:grid-cols-3">
+    <div id="quienes" class="lg:col-span-2 bg-white rounded-2xl p-8 shadow">
+      <h3 class="text-2xl font-bold">Quiénes somos</h3>
+      <p class="mt-4 text-slate-600">IGOR es una plataforma desarrollada para la gestión integral de proyectos en empresas de servicios y construcción. Facilitamos la asignación y documentación de tareas, seguimiento de recursos y generación automatizada de métricas (KPIs) para la toma de decisiones.</p>
+
+      <div class="mt-6 grid sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-lg border bg-white">
+          <h4 class="font-semibold">Nuestra propuesta</h4>
+          <p class="mt-2 text-sm text-slate-500">Reducir la carga administrativa y mejorar la trazabilidad de las tareas con un flujo claro de documentación.</p>
+        </div>
+        <div class="p-4 rounded-lg border bg-white">
+          <h4 class="font-semibold">Valores</h4>
+          <p class="mt-2 text-sm text-slate-500">Transparencia, eficiencia y colaboración entre equipos.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="bg-white rounded-2xl p-8 shadow">
+      <div id="vision">
+        <h4 class="text-lg font-bold">Visión</h4>
+        <p class="mt-2 text-sm text-slate-500">Ser la plataforma de referencia en Latinoamérica para la gestión de proyectos y métricas operativas en pymes y empresas constructoras.</p>
+      </div>
+
+      <div id="mision" class="mt-6">
+        <h4 class="text-lg font-bold">Misión</h4>
+        <p class="mt-2 text-sm text-slate-500">Empoderar a equipos operativos y gerenciales con herramientas simples para documentar el trabajo, medir rendimiento y optimizar recursos.</p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- MÓDULOS / FEATURES -->
+  <section id="modulos" class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+    <h3 class="text-2xl font-bold">Módulos principales</h3>
+    <p class="mt-2 text-slate-500">Diseñados para cubrir las necesidades del ciclo completo del proyecto.</p>
+
+    <div class="mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+        <h4 class="font-semibold">Registro de usuarios</h4>
+        <p class="mt-2 text-sm text-slate-500">Gestión de roles: Cliente, Trabajador, Supervisor y Director.</p>
+      </article>
+
+      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+        <h4 class="font-semibold">Gestión de proyectos</h4>
+        <p class="mt-2 text-sm text-slate-500">Creación, asignación y seguimiento de tareas.</p>
+      </article>
+
+      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+        <h4 class="font-semibold">Gestión de recursos</h4>
+        <p class="mt-2 text-sm text-slate-500">Control de disponibilidad y asignación de recursos por proyecto.</p>
+      </article>
+
+      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+        <h4 class="font-semibold">Análisis & KPIs</h4>
+        <p class="mt-2 text-sm text-slate-500">KPIs automáticos basados en tareas documentadas.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA / Contacto -->
+  <section id="contacto" class="bg-gradient-to-r from-slate-50 to-white border-t">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid lg:grid-cols-2 gap-8 items-center">
+      <div class="bg-white rounded-2xl p-8 shadow">
+        <h3 class="text-xl font-bold">¿Listo para mejorar tu gestión?</h3>
+        <p class="mt-3 text-slate-600">Solicita una demo o crea una cuenta para empezar a medir resultados reales.</p>
+
+        <div class="mt-6 flex gap-3">
+          <a th:href="@{/register}" href="/register" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Crear cuenta</a>
+          <a th:href="@{/contact}" href="/contact" class="px-4 py-2 rounded-md border border-slate-200">Contactar</a>
+        </div>
+      </div>
+
+      <form class="bg-white rounded-2xl p-6 shadow" method="post" th:action="@{/contact}">
+        <label class="block text-sm font-medium text-slate-600">Nombre</label>
+        <input name="nombre" class="mt-1 block w-full rounded-md border px-3 py-2" required>
+
+        <label class="block text-sm font-medium text-slate-600 mt-4">Correo</label>
+        <input type="email" name="email" class="mt-1 block w-full rounded-md border px-3 py-2" required>
+
+        <label class="block text-sm font-medium text-slate-600 mt-4">Mensaje</label>
+        <textarea name="mensaje" rows="3" class="mt-1 block w-full rounded-md border px-3 py-2"></textarea>
+
+        <div class="mt-4 text-right">
+          <button type="submit" class="px-4 py-2 rounded-md bg-cyan-500 text-white">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t mt-12">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="text-sm text-slate-500">© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> IGOR. Todos los derechos reservados.</div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="#" class="hover:text-slate-900">Privacidad</a>
+        <a href="#" class="hover:text-slate-900">Términos</a>
+        <a href="#" class="hover:text-slate-900">Soporte</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

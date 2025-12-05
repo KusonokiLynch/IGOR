@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generar Reporte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: sidebar" class="hidden md:block"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto">
+            <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Generar Reporte</h1>
+
+            <!-- Botón Volver -->
+            <div class="mb-6 text-left">
+                <a href="/analisis" 
+                   class="inline-block bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded hover:bg-gray-400 transition-colors">
+                    ← Volver a Análisis
+                </a>
+            </div>
+
+            <form th:action="@{/analisis/generar-pdf}" method="get" class="space-y-4">
+                <div>
+                    <label for="idProyecto" class="block text-gray-700 font-medium mb-2">Selecciona un Proyecto:</label>
+                    <select id="idProyecto" name="idProyecto" 
+                            class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="" disabled selected>-- Elige un proyecto --</option>
+                        <option th:each="proyecto : ${proyectos}" 
+                                th:value="${proyecto.id}" 
+                                th:text="${proyecto.nombre}">
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors">
+                    Generar PDF
+                </button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<aside th:fragment="sidebar" class="w-64 bg-gray-800 text-white h-screen flex-shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-gray-700">
+            IGOR
+        </div>
+        <nav class="mt-6 flex flex-col justify-between h-full">
+            <ul>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/miPerfil" class="block">Mi Usuario</a>
+                </li>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/proyectos" class="block">Gestión de Proyectos</a>
+                </li>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/recursos" class="block">Gestión de Recursos</a>
+                </li>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/clientes" class="block">Gestión de Clientes</a>
+                </li>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/documentacion" class="block">Documentación</a>
+                </li>
+                <li class="px-6 py-3 hover:bg-gray-700">
+                    <a href="/analisis" class="block">Análisis y Reportes</a>
+                </li>
+                
+
+            <form th:action="@{/logout}" method="post" class="p-6">
+            
+                <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1 rounded w-full">
+                    Cerrar sesión
+                </button>
+            </form>
+            
+            </ul>
+
+            
+        </nav>
+    </aside>

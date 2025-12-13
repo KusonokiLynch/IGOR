@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;  // 👈 necesario para obtener el usuario logueado
+import org.springframework.web.bind.annotation.PostMapping; 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.IGORPROYECTO.Command.CargarUsuarioCommand;
 import com.example.IGORPROYECTO.model.Usuario;
 import com.example.IGORPROYECTO.service.UsuarioService;
 
@@ -15,6 +18,9 @@ import com.example.IGORPROYECTO.service.UsuarioService;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+    
+
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
@@ -50,7 +56,7 @@ public class UsuarioController {
     @PostMapping("/guardar")
     public String guardarUsuario(@ModelAttribute Usuario usuario) {
         usuarioService.guardar(usuario);
-        return "redirect:/usuarios";
+        return "redirect:/clientes";
     }
 
     @GetMapping("/usuarios/{id}")
@@ -63,6 +69,26 @@ public class UsuarioController {
     @GetMapping("/usuarios/eliminar/{id}")
     public String eliminarUsuario(@PathVariable String id) {
         usuarioService.eliminar(id);
-        return "redirect:/usuarios";
+        return "redirect:/clientes";
     }
+
+        // NUEVO: Formulario de carga masiva
+    @GetMapping("/usuarios/carga")
+    public String mostrarFormularioCarga(Model model) {
+        return "cargaUsuarios";     
+    }
+
+    @PostMapping("/usuarios/carga")
+    public String cargarUsuarios(@RequestParam("archivo") MultipartFile archivo, Model model) {
+    // Crear comando
+    CargarUsuarioCommand comando = new CargarUsuarioCommand(archivo, usuarioService);
+    // Ejecutar el comando directamente
+    comando.execute();
+    // Agregar mensaje de éxito
+    model.addAttribute("mensaje", "Archivo de usuarios procesado correctamente!");
+    // Retornar la misma plantilla de registro
+    model.addAttribute("usuario", new Usuario()); // para mantener el formulario limpio
+    return "registro"; 
+} 
+
 }

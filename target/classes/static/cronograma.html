@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma - IGOR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .evento-card {
+            transition: transform 0.2s;
+            border-left: 5px solid;
+        }
+        .evento-card:hover {
+            transform: translateY(-5px);
+        }
+        .tipo-REUNION { border-left-color: #3498db; }
+        .tipo-DOCUMENTO { border-left-color: #2ecc71; }
+        .tipo-HITO { border-left-color: #e74c3c; }
+        .tipo-CAMBIO_ESTADO { border-left-color: #f39c12; }
+        .badge-tipo {
+            font-size: 0.9em;
+            padding: 8px 12px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        .empty-state i {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="mb-4">Cronograma del Proyecto</h1>
+                
+                <!-- Filtros -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="text" id="proyectoId" class="form-control" placeholder="ID del Proyecto" value="test123">
+                    </div>
+                    <div class="col-md-4">
+                        <select id="tipoFiltro" class="form-select">
+                            <option value="">Todos los tipos</option>
+                            <option value="REUNION">Reuniones</option>
+                            <option value="DOCUMENTO">Documentos</option>
+                            <option value="HITO">Hitos</option>
+                            <option value="CAMBIO_ESTADO">Cambios de Estado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button onclick="cargarEventos()" class="btn btn-primary w-100">Buscar</button>
+                    </div>
+                </div>
+                
+                <a href="/documentacion" class="btn btn-outline-primary">
+                        Volver
+                    </a>
+                    <br><br>
+                <!-- Estadísticas -->
+                <div class="row mb-4" id="stats" style="display: none;"> 
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h3 id="totalEventos">0</h3>
+                                <p class="mb-0">Total Eventos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3 id="totalReuniones">0</h3>
+                                <p class="mb-0">Reuniones</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3 id="totalDocumentos">0</h3>
+                                <p class="mb-0">Documentos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h3 id="totalHitos">0</h3>
+                                <p class="mb-0">Hitos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="loading" class="text-center" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-2">Cargando eventos...</p>
+                </div>
+
+                <!-- Lista de eventos -->
+                <div id="eventos"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api/cronograma';
+
+        async function cargarEventos() {
+            const proyectoId = document.getElementById('proyectoId').value;
+            const tipoFiltro = document.getElementById('tipoFiltro').value;
+            
+            if (!proyectoId) {
+                alert('Por favor ingresa un ID de proyecto');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('eventos').innerHTML = '';
+            document.getElementById('stats').style.display = 'none';
+
+            try {
+                let url = `${API_URL}/proyecto/${proyectoId}`;
+                if (tipoFiltro) {
+                    url += `/tipo/${tipoFiltro}`;
+                }
+
+                const response = await fetch(url);
+                
+                if (response.status === 204) {
+                    mostrarMensajeVacio();
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Error al cargar eventos');
+                }
+
+                const eventos = await response.json();
+                mostrarEventos(eventos);
+                mostrarEstadisticas(eventos);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('eventos').innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ Error al cargar eventos: ${error.message}
+                    </div>
+                `;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function mostrarEventos(eventos) {
+            const container = document.getElementById('eventos');
+            
+            if (eventos.length === 0) {
+                mostrarMensajeVacio();
+                return;
+            }
+
+            const html = eventos.map(evento => {
+                const fecha = new Date(evento.fecha);
+                const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const iconos = {
+                    REUNION: '👥',
+                    DOCUMENTO: '📄',
+                    HITO: '🎯',
+                    CAMBIO_ESTADO: '🔄'
+                };
+
+                const colores = {
+                    REUNION: 'primary',
+                    DOCUMENTO: 'success',
+                    HITO: 'danger',
+                    CAMBIO_ESTADO: 'warning'
+                };
+
+                return `
+                    <div class="card evento-card tipo-${evento.tipo} mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title">
+                                        ${iconos[evento.tipo] || '📌'} ${evento.descripcion}
+                                    </h5>
+                                    <p class="text-muted mb-2">
+                                        🗓️ ${fechaFormateada}
+                                    </p>
+                                    ${evento.detalles ? `<p class="card-text">${evento.detalles}</p>` : ''}
+                                    <small class="text-muted">
+                                        Creado por: ${evento.creadoPor || 'N/A'}
+                                    </small>
+                                </div>
+                                <span class="badge bg-${colores[evento.tipo]} badge-tipo">
+                                    ${evento.tipo}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        function mostrarEstadisticas(eventos) {
+            document.getElementById('stats').style.display = 'flex';
+            document.getElementById('totalEventos').textContent = eventos.length;
+            document.getElementById('totalReuniones').textContent = 
+                eventos.filter(e => e.tipo === 'REUNION').length;
+            document.getElementById('totalDocumentos').textContent = 
+                eventos.filter(e => e.tipo === 'DOCUMENTO').length;
+            document.getElementById('totalHitos').textContent = 
+                eventos.filter(e => e.tipo === 'HITO').length;
+        }
+
+        function mostrarMensajeVacio() {
+            document.getElementById('eventos').innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size: 4em;">📭</div>
+                    <h3>No hay eventos</h3>
+                    <p>Este proyecto aún no tiene eventos en el cronograma</p>
+                </div>
+            `;
+        }
+
+        // Cargar automáticamente al inicio
+        window.onload = () => cargarEventos();
+    </script>
+</body>
+</html>

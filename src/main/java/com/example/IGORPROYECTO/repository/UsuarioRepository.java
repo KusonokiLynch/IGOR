@@ -12,4 +12,6 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
     
     // Buscar usuario por correo (necesario para Gmail)
     Optional<Usuario> findByCorreo(String correo);
+
+    Optional<Usuario> findByRol(String rol);
 }

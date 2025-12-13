@@ -1,20 +1,11 @@
-function filtrarTabla() {
-    let input = document.getElementById("buscador");
-    let filter = input.value.toLowerCase();
-    let tabla = document.querySelector("table tbody");
-    let filas = tabla.getElementsByTagName("tr");
-
-    for (let i = 0; i < filas.length; i++) {
-        let celdas = filas[i].getElementsByTagName("td");
-        let textoFila = "";
-        for(let j=0; j < celdas.length; j++) {
-            textoFila += celdas[j].textContent.toLowerCase() + " ";
-        }
-        if (textoFila.indexOf(filter) > -1) {
-            filas[i].style.display = "";
-        } else {
-            filas[i].style.display = "none";
-        }
-    }
-}
-
+document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#docsTable tbody tr:not(.hidden)');
+            
+            rows.forEach(row => {
+                if (!row.id.startsWith('formulario-')) {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                }
+            });
+        });

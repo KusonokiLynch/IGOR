@@ -160,6 +160,22 @@
                 </form>
             </section>
 
+            <!-- Carga masiva de documentos -->
+            <section class="bg-white rounded-lg shadow-lg overflow-hidden mt-12 p-8">
+                <h5 class="text-center text-xl font-semibold mb-6"> Carga Masiva</h5>
+
+                <form th:action="@{/documentacion/carga}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+                    <div class="mb-3">
+                        <label class="form-label block mb-2 font-semibold text-gray-700">Archivo CSV de documentos</label>
+                        <input type="file" name="archivo" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" accept=".csv" required>
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold transition">
+                        Cargar Documentos
+                    </button>
+                </form>
+            </section>
+
             <!-- Información adicional -->
             <section class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
                 <div class="flex items-start">

@@ -50,4 +50,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     return usuarioRepository.findByUsuario(usuario).orElse(null);
 }
 
+@Override
+public void guardarTodos(List<Usuario> usuarios) {
+    for (Usuario u : usuarios) {
+        u.setContrasena(passwordEncoder.encode(u.getContrasena()));
+    }
+    usuarioRepository.saveAll(usuarios);
+}
+
 }

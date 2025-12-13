@@ -7,8 +7,9 @@
 </head>
 <body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow p-4" style="width: 450px; border-radius: 15px;">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow p-4" style="max-width: 600px; width: 100%; border-radius: 15px;">
+
         <h3 class="text-center mb-4">Crear cuenta</h3>
 
         <!-- Formulario de registro -->
@@ -51,7 +52,7 @@
 
             <!-- Selección de rol -->
             <div class="mb-3">
-            <label class="form-label">Rol</label>
+                <label class="form-label">Rol</label>
                 <select class="form-select" th:field="*{rol}" required>
                     <option value="" disabled selected>Seleccione un rol</option>
                     <option value="CLIENTE">Cliente</option>
@@ -67,6 +68,21 @@
         <p class="text-center mt-3">
             ¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión aquí</a>
         </p>
+
+        <hr>
+        <h5 class="text-center mt-4">Carga de usuarios masiva</h5>
+
+        <form th:action="@{/usuarios/carga}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Archivo CSV de usuarios</label>
+                <input type="file" name="archivo" class="form-control" accept=".csv" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Cargar Usuarios</button>
+        </form>
+
+        <!-- Mensaje de resultado -->
+        <div th:if="${mensaje}" class="alert alert-info mt-3" th:text="${mensaje}"></div>
+
     </div>
 </div>
 

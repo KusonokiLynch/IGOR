@@ -1,11 +1,15 @@
 package com.example.IGORPROYECTO.controller;
 
-import com.example.IGORPROYECTO.service.EmailSenderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.thymeleaf.exceptions.TemplateProcessingException;
+
+import com.example.IGORPROYECTO.service.EmailSenderService;
+
+import jakarta.mail.MessagingException;
 
 @Controller
 @RequestMapping("/mail")
@@ -23,16 +27,24 @@ public class MailController {
     }
 
     @PostMapping("/send")
-    public String enviarCorreo(String destinatario, String asunto, String mensaje, Model model) {
+        public String enviarCorreo(String destinatario, String asunto, String mensaje, String nombre, Model model) {
 
         try {
-            emailSenderService.enviarCorreo(destinatario, asunto, mensaje);
-            model.addAttribute("respuesta", "Correo enviado exitosamente.");
-        } catch (Exception e) {
-            model.addAttribute("respuesta", "Error al enviar el correo: " + e.getMessage());
-        }
+        String[] destinatarios = destinatario.split("\\s*,\\s*");
 
-        // CORREGIDO: antes decía "mail/form" (que NO existe)
-        return "AnalisisYReportes/form";
+        emailSenderService.enviarCorreoConPlantilla(destinatarios, asunto, mensaje);
+
+        model.addAttribute("respuesta", "Correo enviado con plantilla HTML exitosamente.");
+    }   catch (MessagingException e) {
+        model.addAttribute("respuesta", "Error al enviar el correo: " + e.getMessage());
+    }   catch (TemplateProcessingException e) {
+        model.addAttribute("respuesta", "Error en la plantilla HTML: " + e.getMessage());
+    }   catch (Exception e) {
+        model.addAttribute("respuesta", "Error desconocido: " + e.getMessage());
     }
+
+    return "AnalisisYReportes/form";
+    }
+    
+
 }

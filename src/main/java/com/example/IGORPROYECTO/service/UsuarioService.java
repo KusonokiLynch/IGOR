@@ -12,5 +12,8 @@ public interface UsuarioService {
     void eliminar(String id);
     Usuario buscarPorUsuario(String usuario);
 
+      // NUEVO: guardar lista de usuarios (para carga masiva)
+    void guardarTodos(List<Usuario> usuarios);
+
 }
 

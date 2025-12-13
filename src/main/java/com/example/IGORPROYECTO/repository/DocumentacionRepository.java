@@ -10,4 +10,10 @@ import com.example.IGORPROYECTO.model.Documentacion;
 @Repository
 public interface DocumentacionRepository extends MongoRepository<Documentacion, String> {
     List<Documentacion> findByNombreProyecto(String nombreProyecto);
+
+     // Buscar documentos por estado (ACTIVO o INACTIVO)
+    List<Documentacion> findByEstado(String estado);
+    
+    // Buscar por múltiples estados (útil si necesitas filtrar por varios estados)
+    List<Documentacion> findByEstadoIn(List<String> estados);
 }

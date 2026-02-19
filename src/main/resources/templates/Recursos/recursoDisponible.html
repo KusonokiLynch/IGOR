@@ -33,7 +33,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm font-semibold">Total Recursos</p>
-                            <p class="text-3xl font-bold text-gray-800" th:text="${#lists.size(recursos)}">0</p>
+                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.totalRecursos ?: 0}">0</p>
                         </div>
                         <div class="bg-indigo-100 rounded-full p-3">
                             <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm font-semibold">Disponibles</p>
-                            <p class="text-3xl font-bold text-gray-800">-</p>
+                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.disponibles ?: 0}">0</p>
                         </div>
                         <div class="bg-green-100 rounded-full p-3">
                             <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +61,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm font-semibold">Asignados</p>
-                            <p class="text-3xl font-bold text-gray-800">-</p>
+                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.asignados ?: 0}">0</p>
                         </div>
                         <div class="bg-yellow-100 rounded-full p-3">
                             <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm font-semibold">No Disponibles</p>
-                            <p class="text-3xl font-bold text-gray-800">-</p>
+                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.noDisponibles ?: 0}">0</p>
                         </div>
                         <div class="bg-red-100 rounded-full p-3">
                             <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div th:if="${rol == 'administrador'}" class="flex gap-2">
+                                        <div class="flex gap-2">
                                             <a th:href="@{/recursos/editar/{id}(id=${recurso.id})}" 
                                                class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition gap-1">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

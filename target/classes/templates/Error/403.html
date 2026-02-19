@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso Denegado - IGOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8 flex items-center justify-center">
+            
+            <div class="max-w-2xl w-full">
+                
+                <!-- Card de Error -->
+                <div class="bg-white rounded-lg shadow-xl p-12 border-t-4 border-red-500 text-center">
+                    
+                    <!-- Icono de Error -->
+                    <div class="bg-red-100 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Código de Error -->
+                    <h1 class="text-6xl font-bold text-gray-800 mb-4">403</h1>
+                    
+                    <!-- Título -->
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Acceso Denegado</h2>
+                    
+                    <!-- Descripción -->
+                    <p class="text-gray-600 text-lg mb-2">No tienes los permisos necesarios para acceder a este recurso.</p>
+                    
+                    <!-- Rol requerido (si está disponible) -->
+                    <p class="text-gray-500 text-sm mb-8">
+                        Si crees que esto es un error, contacta al administrador del sistema.
+                    </p>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a th:href="@{/home}" 
+                           class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <div class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                Volver al Inicio
+                            </div>
+                        </a>
+                        
+                        <button onclick="history.back()" 
+                                class="bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <div class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                </svg>
+                                Página Anterior
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Información Adicional -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-500 text-sm">
+                        Código de error: <span class="font-mono font-semibold">HTTP 403 FORBIDDEN</span>
+                    </p>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

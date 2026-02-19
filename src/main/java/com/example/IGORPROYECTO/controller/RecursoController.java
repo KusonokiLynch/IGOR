@@ -1,7 +1,10 @@
 package com.example.IGORPROYECTO.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +28,11 @@ public class RecursoController {
 
     // Listar recursos con estadísticas
     @GetMapping
-    public String menuRecurso(Model model) {
+    public String menuRecurso(Model model, Authentication auth) {
         List<Recurso> recursos = recursoService.menuRecurso();
+        
+        // ✅ AGREGADO: Obtener rol sin prefijo
+        String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
         // Calcular estadísticas
         long totalRecursos = recursos.size();
@@ -40,8 +46,19 @@ public class RecursoController {
             .filter(r -> r.getAsignadoA() != null && !r.getAsignadoA().isEmpty())
             .count();
         
+        // Crear Map de estadísticas
+        Map<String, Long> estadisticas = new HashMap<>();
+        estadisticas.put("totalRecursos", totalRecursos);
+        estadisticas.put("disponibles", disponibles);
+        estadisticas.put("noDisponibles", noDisponibles);
+        estadisticas.put("asignados", asignados);
+        
         // Pasar datos al modelo
         model.addAttribute("recursos", recursos);
+        model.addAttribute("estadisticas", estadisticas);
+        model.addAttribute("rol", rol); // ✅ AGREGADO
+        
+        // Mantener compatibilidad
         model.addAttribute("totalRecursos", totalRecursos);
         model.addAttribute("disponibles", disponibles);
         model.addAttribute("noDisponibles", noDisponibles);
@@ -52,9 +69,12 @@ public class RecursoController {
 
     // Disponibles con estadísticas
     @GetMapping("/recursoDisponible")
-    public String consultarDisponibles(Model model) {
+    public String consultarDisponibles(Model model, Authentication auth) {
         List<Recurso> recursosDisponibles = recursoService.recursoDisponible();
-        List<Recurso> todosLosRecursos = recursoService.menuRecurso(); // Para calcular estadísticas globales
+        List<Recurso> todosLosRecursos = recursoService.menuRecurso();
+        
+        // ✅ AGREGADO: Obtener rol sin prefijo
+        String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
         // Calcular estadísticas con TODOS los recursos
         long totalRecursos = todosLosRecursos.size();
@@ -68,8 +88,19 @@ public class RecursoController {
             .filter(r -> r.getAsignadoA() != null && !r.getAsignadoA().isEmpty())
             .count();
         
+        // Crear Map de estadísticas
+        Map<String, Long> estadisticas = new HashMap<>();
+        estadisticas.put("totalRecursos", totalRecursos);
+        estadisticas.put("disponibles", disponibles);
+        estadisticas.put("noDisponibles", noDisponibles);
+        estadisticas.put("asignados", asignados);
+        
         // Pasar datos al modelo
-        model.addAttribute("recursos", recursosDisponibles); // Solo disponibles para la tabla
+        model.addAttribute("recursos", recursosDisponibles);
+        model.addAttribute("estadisticas", estadisticas);
+        model.addAttribute("rol", rol); // ✅ AGREGADO
+        
+        // Mantener compatibilidad
         model.addAttribute("totalRecursos", totalRecursos);
         model.addAttribute("disponibles", disponibles);
         model.addAttribute("noDisponibles", noDisponibles);

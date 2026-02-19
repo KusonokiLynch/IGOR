@@ -37,6 +37,7 @@ com\example\IGORPROYECTO\service\ClienteService.class
 com\example\IGORPROYECTO\repository\KpisRepository.class
 com\example\IGORPROYECTO\controller\RecursoController.class
 com\example\IGORPROYECTO\service\RecursoService.class
+com\example\IGORPROYECTO\controller\TestErrorController.class
 com\example\IGORPROYECTO\model\Recurso.class
 com\example\IGORPROYECTO\repository\ClienteRepository.class
 com\example\IGORPROYECTO\model\Trabajador.class

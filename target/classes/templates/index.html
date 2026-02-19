@@ -3,77 +3,129 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IGOR — Sistema de Gestión de Proyectos</title>
-  <!-- Tailwind Play CDN (rápido para desarrollo). Para producción, compila Tailwind y elimina este CDN -->
+  <title>IGOR — Sistema Empresarial de Gestión de Proyectos</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="description" content="IGOR - Sistema profesional de gestión de proyectos, análisis y recursos">
+  <meta name="description" content="IGOR - Plataforma empresarial de gestión de proyectos, análisis estratégico y optimización de recursos">
 </head>
-<body class="antialiased text-slate-700 bg-slate-50">
-  <!-- NAV -->
-  <header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="flex justify-between items-center py-4">
-        <a href="#" class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-md bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold">IG</div>
-          <div>
-            <h1 class="text-lg font-semibold">IGOR</h1>
-            <p class="text-xs text-slate-400">Gestión & Análisis</p>
+<body class="antialiased bg-white">
+
+  <!-- NAVIGATION -->
+  <nav class="fixed w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 bg-gray-800 flex items-center justify-center">
+              <span class="text-white font-bold text-sm">IGOR</span>
+            </div>
+            <span class="text-xl font-semibold text-gray-800">IGOR</span>
           </div>
-        </a>
+        </div>
 
-        <nav class="hidden md:flex items-center gap-6">
-          <a href="#quienes" class="hover:text-slate-900">Quiénes somos</a>
-          <a href="#vision" class="hover:text-slate-900">Visión</a>
-          <a href="#mision" class="hover:text-slate-900">Misión</a>
-          <a href="#modulos" class="hover:text-slate-900">Módulos</a>
-          <a href="#contacto" class="hover:text-slate-900">Contacto</a>
-        </nav>
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#solucion" class="text-sm font-medium text-gray-700 hover:text-gray-800 transition">Solución</a>
+          <a href="#modulos" class="text-sm font-medium text-gray-700 hover:text-gray-800 transition">Módulos</a>
+          <a href="#empresa" class="text-sm font-medium text-gray-700 hover:text-gray-800 transition">Empresa</a>
+          <a href="#contacto" class="text-sm font-medium text-gray-700 hover:text-gray-800 transition">Contacto</a>
+        </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Ajusta la ruta de login según tu controlador -->
-          <a th:href="@{/login}" href="/login" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-indigo-600 text-white shadow hover:bg-indigo-700">Iniciar sesión</a>
+        <!-- CTA Button -->
+        <div class="flex items-center space-x-4">
+          <a th:href="@{/login}" href="/login" class="text-sm font-medium text-gray-700 hover:text-gray-800">Iniciar sesión</a>
+          <a th:href="@{/registro}" href="/registro" class="px-5 py-2 bg-gray-800 text-white text-sm font-medium hover:bg-gray-700 transition">Comenzar</a>
         </div>
       </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- HERO -->
-  <section class="relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16">
+  <!-- HERO SECTION -->
+  <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Left Content -->
         <div>
-          <h2 class="text-4xl font-extrabold text-slate-900">IGOR — Gestión de proyectos con enfoque en resultados</h2>
-          <p class="mt-4 text-lg text-slate-600">Optimiza recursos, documenta tareas y genera KPIs automáticamente. Plataforma pensada para equipos reales: Director, Supervisor, Trabajador y Cliente.</p>
+          <div class="inline-block mb-4">
+            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-semibold tracking-wide uppercase">Gestión empresarial</span>
+          </div>
+          
+          <h1 class="text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-6">
+            Control total de sus proyectos
+          </h1>
+          
+          <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+            Plataforma integral de gestión diseñada para empresas que requieren trazabilidad, eficiencia operativa y toma de decisiones basada en datos.
+          </p>
 
-          <div class="mt-8 flex gap-4">
-            <a th:href="@{/analisis}" href="/analisis" class="px-5 py-3 rounded-md bg-cyan-500 text-white font-medium shadow hover:bg-cyan-600">Ir a Análisis & KPIs</a>
-            <a href="#modulos" class="px-5 py-3 rounded-md border border-slate-200 bg-white hover:bg-slate-50">Ver módulos</a>
+          <div class="flex flex-col sm:flex-row gap-4 mb-12">
+            <a th:href="@{/registro}" href="/registro" class="px-8 py-4 bg-gray-800 text-white font-medium text-center hover:bg-gray-700 transition">
+              Solicitar demostración
+            </a>
+            <a href="#modulos" class="px-8 py-4 border-2 border-gray-800 text-gray-800 font-medium text-center hover:bg-gray-50 transition">
+              Ver capacidades
+            </a>
           </div>
 
-          <ul class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600">
-            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Documentación automática de tareas</li>
-            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path></svg> KPIs generados desde registros</li>
-            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path></svg> Gestión de recursos y proyectos</li>
-            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8z"></path></svg> Roles y permisos integrados</li>
-          </ul>
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200">
+            <div>
+              <div class="text-3xl font-bold text-gray-800">100%</div>
+              <div class="text-sm text-gray-600 mt-1">Trazabilidad</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-gray-800">4</div>
+              <div class="text-sm text-gray-600 mt-1">Roles integrados</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-gray-800">Real-time</div>
+              <div class="text-sm text-gray-600 mt-1">Análisis KPI</div>
+            </div>
+          </div>
         </div>
 
+        <!-- Right Content - Visual -->
         <div class="relative">
-          <div class="rounded-2xl bg-gradient-to-br from-indigo-50 to-cyan-50 p-1 shadow-lg">
-            <div class="bg-white rounded-2xl p-6">
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="dashboard" class="w-full rounded-md shadow-sm object-cover h-64 sm:h-80">
-
-              <div class="mt-4 grid grid-cols-2 gap-3">
-                <div class="p-3 rounded-md border border-slate-100 bg-white">
-                  <h4 class="text-sm text-slate-500">Proyectos</h4>
-                  <p class="text-lg font-semibold text-slate-800 mt-1">12</p>
+          <div class="bg-gray-800 p-8 shadow-2xl">
+            <div class="bg-white p-6">
+              <!-- Dashboard Preview -->
+              <div class="space-y-4">
+                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <span class="text-sm font-semibold text-gray-800">PANEL DE CONTROL</span>
+                  <span class="text-xs text-gray-500">En tiempo real</span>
                 </div>
-                <div class="p-3 rounded-md border border-slate-100 bg-white">
-                  <h4 class="text-sm text-slate-500">Tareas pendientes</h4>
-                  <p class="text-lg font-semibold text-slate-800 mt-1">34</p>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="border border-gray-200 p-4">
+                    <div class="text-2xl font-bold text-gray-800">127</div>
+                    <div class="text-xs text-gray-600 mt-1">Proyectos activos</div>
+                  </div>
+                  <div class="border border-gray-200 p-4">
+                    <div class="text-2xl font-bold text-gray-800">94%</div>
+                    <div class="text-xs text-gray-600 mt-1">Eficiencia</div>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-gray-600">Proyecto Alpha</span>
+                    <span class="text-gray-800 font-medium">87%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 h-1.5">
+                    <div class="bg-gray-800 h-1.5" style="width: 87%"></div>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-gray-600">Proyecto Beta</span>
+                    <span class="text-gray-800 font-medium">62%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 h-1.5">
+                    <div class="bg-gray-800 h-1.5" style="width: 62%"></div>
+                  </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -81,105 +133,260 @@
     </div>
   </section>
 
-  <!-- QUIENES SOMOS / VISION / MISION -->
-  <section class="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid gap-10 lg:grid-cols-3">
-    <div id="quienes" class="lg:col-span-2 bg-white rounded-2xl p-8 shadow">
-      <h3 class="text-2xl font-bold">Quiénes somos</h3>
-      <p class="mt-4 text-slate-600">IGOR es una plataforma desarrollada para la gestión integral de proyectos en empresas de servicios y construcción. Facilitamos la asignación y documentación de tareas, seguimiento de recursos y generación automatizada de métricas (KPIs) para la toma de decisiones.</p>
+  <!-- SOLUTION SECTION -->
+  <section id="solucion" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Solución integral para su organización</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          IGOR proporciona las herramientas necesarias para una gestión profesional y eficiente de proyectos empresariales.
+        </p>
+      </div>
 
-      <div class="mt-6 grid sm:grid-cols-2 gap-4">
-        <div class="p-4 rounded-lg border bg-white">
-          <h4 class="font-semibold">Nuestra propuesta</h4>
-          <p class="mt-2 text-sm text-slate-500">Reducir la carga administrativa y mejorar la trazabilidad de las tareas con un flujo claro de documentación.</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 border border-gray-200">
+          <div class="w-12 h-12 bg-gray-800 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Análisis estratégico</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Generación automática de KPIs y métricas operativas basadas en datos reales del proyecto.
+          </p>
         </div>
-        <div class="p-4 rounded-lg border bg-white">
-          <h4 class="font-semibold">Valores</h4>
-          <p class="mt-2 text-sm text-slate-500">Transparencia, eficiencia y colaboración entre equipos.</p>
+
+        <div class="bg-white p-8 border border-gray-200">
+          <div class="w-12 h-12 bg-gray-800 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Gestión de equipos</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Sistema de roles jerárquicos: Director, Supervisor, Trabajador y Cliente con permisos diferenciados.
+          </p>
+        </div>
+
+        <div class="bg-white p-8 border border-gray-200">
+          <div class="w-12 h-12 bg-gray-800 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">Documentación automática</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Registro automatizado de tareas, recursos y actividades con trazabilidad completa.
+          </p>
         </div>
       </div>
     </div>
-
-    <aside class="bg-white rounded-2xl p-8 shadow">
-      <div id="vision">
-        <h4 class="text-lg font-bold">Visión</h4>
-        <p class="mt-2 text-sm text-slate-500">Ser la plataforma de referencia en Latinoamérica para la gestión de proyectos y métricas operativas en pymes y empresas constructoras.</p>
-      </div>
-
-      <div id="mision" class="mt-6">
-        <h4 class="text-lg font-bold">Misión</h4>
-        <p class="mt-2 text-sm text-slate-500">Empoderar a equipos operativos y gerenciales con herramientas simples para documentar el trabajo, medir rendimiento y optimizar recursos.</p>
-      </div>
-    </aside>
   </section>
 
-  <!-- MÓDULOS / FEATURES -->
-  <section id="modulos" class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-    <h3 class="text-2xl font-bold">Módulos principales</h3>
-    <p class="mt-2 text-slate-500">Diseñados para cubrir las necesidades del ciclo completo del proyecto.</p>
+  <!-- MODULES SECTION -->
+  <section id="modulos" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Módulos del sistema</h2>
+        <p class="text-xl text-gray-600">Funcionalidades diseñadas para cubrir el ciclo completo de gestión.</p>
+      </div>
 
-    <div class="mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-        <h4 class="font-semibold">Registro de usuarios</h4>
-        <p class="mt-2 text-sm text-slate-500">Gestión de roles: Cliente, Trabajador, Supervisor y Director.</p>
-      </article>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="border border-gray-200 p-6 hover:border-gray-800 transition">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Gestión de proyectos</h3>
+          <p class="text-sm text-gray-600 mb-4">Creación, asignación y seguimiento completo de proyectos con estados y métricas.</p>
+          <a href="#" class="text-sm font-medium text-gray-800 hover:underline">Más información →</a>
+        </div>
 
-      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-        <h4 class="font-semibold">Gestión de proyectos</h4>
-        <p class="mt-2 text-sm text-slate-500">Creación, asignación y seguimiento de tareas.</p>
-      </article>
+        <div class="border border-gray-200 p-6 hover:border-gray-800 transition">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Gestión de recursos</h3>
+          <p class="text-sm text-gray-600 mb-4">Control de disponibilidad y asignación óptima de recursos empresariales.</p>
+          <a href="#" class="text-sm font-medium text-gray-800 hover:underline">Más información →</a>
+        </div>
 
-      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-        <h4 class="font-semibold">Gestión de recursos</h4>
-        <p class="mt-2 text-sm text-slate-500">Control de disponibilidad y asignación de recursos por proyecto.</p>
-      </article>
+        <div class="border border-gray-200 p-6 hover:border-gray-800 transition">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Análisis y KPIs</h3>
+          <p class="text-sm text-gray-600 mb-4">Métricas automatizadas y dashboards ejecutivos en tiempo real.</p>
+          <a href="#" class="text-sm font-medium text-gray-800 hover:underline">Más información →</a>
+        </div>
 
-      <article class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
-        <h4 class="font-semibold">Análisis & KPIs</h4>
-        <p class="mt-2 text-sm text-slate-500">KPIs automáticos basados en tareas documentadas.</p>
-      </article>
+        <div class="border border-gray-200 p-6 hover:border-gray-800 transition">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Sistema de usuarios</h3>
+          <p class="text-sm text-gray-600 mb-4">Gestión completa de roles, permisos y accesos diferenciados.</p>
+          <a href="#" class="text-sm font-medium text-gray-800 hover:underline">Más información →</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- CTA / Contacto -->
-  <section id="contacto" class="bg-gradient-to-r from-slate-50 to-white border-t">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid lg:grid-cols-2 gap-8 items-center">
-      <div class="bg-white rounded-2xl p-8 shadow">
-        <h3 class="text-xl font-bold">¿Listo para mejorar tu gestión?</h3>
-        <p class="mt-3 text-slate-600">Solicita una demo o crea una cuenta para empezar a medir resultados reales.</p>
+  <!-- COMPANY INFO -->
+  <section id="empresa" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-800 mb-6">Sobre IGOR</h2>
+          <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+            Plataforma desarrollada para empresas que requieren control total sobre sus operaciones, con enfoque en trazabilidad, eficiencia y toma de decisiones basada en datos concretos.
+          </p>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            Diseñada específicamente para sectores de servicios y construcción que necesitan documentación rigurosa y análisis constante del desempeño operativo.
+          </p>
 
-        <div class="mt-6 flex gap-3">
-          <a th:href="@{/register}" href="/register" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Crear cuenta</a>
-          <a th:href="@{/contact}" href="/contact" class="px-4 py-2 rounded-md border border-slate-200">Contactar</a>
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start">
+              <div class="w-6 h-6 bg-gray-800 flex items-center justify-center mr-3 mt-1">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-800">Visión</h4>
+                <p class="text-gray-600">Ser la plataforma líder en gestión empresarial para pymes y empresas constructoras en Latinoamérica.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="w-6 h-6 bg-gray-800 flex items-center justify-center mr-3 mt-1">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-800">Misión</h4>
+                <p class="text-gray-600">Proporcionar herramientas profesionales para la documentación, medición y optimización de recursos empresariales.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6">Valores corporativos</h3>
+          <div class="space-y-6">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-2">Transparencia</h4>
+              <p class="text-gray-600">Trazabilidad total de todas las operaciones y decisiones empresariales.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-2">Eficiencia</h4>
+              <p class="text-gray-600">Optimización continua de procesos y reducción de carga administrativa.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-2">Profesionalismo</h4>
+              <p class="text-gray-600">Soluciones empresariales de nivel corporativo con soporte especializado.</p>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <form class="bg-white rounded-2xl p-6 shadow" method="post" th:action="@{/contact}">
-        <label class="block text-sm font-medium text-slate-600">Nombre</label>
-        <input name="nombre" class="mt-1 block w-full rounded-md border px-3 py-2" required>
+  <!-- CONTACT SECTION -->
+  <section id="contacto" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-800 mb-6">Implemente IGOR en su organización</h2>
+          <p class="text-lg text-gray-600 mb-8">
+            Solicite una demostración personalizada y descubra cómo IGOR puede transformar la gestión de sus proyectos.
+          </p>
 
-        <label class="block text-sm font-medium text-slate-600 mt-4">Correo</label>
-        <input type="email" name="email" class="mt-1 block w-full rounded-md border px-3 py-2" required>
-
-        <label class="block text-sm font-medium text-slate-600 mt-4">Mensaje</label>
-        <textarea name="mensaje" rows="3" class="mt-1 block w-full rounded-md border px-3 py-2"></textarea>
-
-        <div class="mt-4 text-right">
-          <button type="submit" class="px-4 py-2 rounded-md bg-cyan-500 text-white">Enviar</button>
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-gray-800 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-gray-700">Demostración sin compromiso</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-gray-800 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-gray-700">Asesoría personalizada</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-gray-800 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-gray-700">Soporte técnico especializado</span>
+            </div>
+          </div>
         </div>
-      </form>
+
+        <div class="bg-gray-50 p-8 border border-gray-200">
+          <form method="post" th:action="@{/contact}">
+            <div class="space-y-6">
+              <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Nombre completo</label>
+                <input type="text" name="nombre" class="w-full px-4 py-3 border border-gray-300 focus:border-gray-800 focus:outline-none" required>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Correo corporativo</label>
+                <input type="email" name="email" class="w-full px-4 py-3 border border-gray-300 focus:border-gray-800 focus:outline-none" required>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Empresa</label>
+                <input type="text" name="empresa" class="w-full px-4 py-3 border border-gray-300 focus:border-gray-800 focus:outline-none" required>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Mensaje</label>
+                <textarea name="mensaje" rows="4" class="w-full px-4 py-3 border border-gray-300 focus:border-gray-800 focus:outline-none"></textarea>
+              </div>
+
+              <button type="submit" class="w-full px-8 py-4 bg-gray-800 text-white font-medium hover:bg-gray-700 transition">
+                Solicitar demostración
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t mt-12">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="text-sm text-slate-500">© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> IGOR. Todos los derechos reservados.</div>
-      <div class="flex items-center gap-4 text-sm">
-        <a href="#" class="hover:text-slate-900">Privacidad</a>
-        <a href="#" class="hover:text-slate-900">Términos</a>
-        <a href="#" class="hover:text-slate-900">Soporte</a>
+  <footer class="bg-gray-800 text-gray-400 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="text-white font-bold text-lg mb-4">IGOR</div>
+          <p class="text-sm">Plataforma empresarial de gestión de proyectos y análisis estratégico.</p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Solución</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Características</a></li>
+            <li><a href="#" class="hover:text-white transition">Módulos</a></li>
+            <li><a href="#" class="hover:text-white transition">Precios</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Empresa</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Sobre nosotros</a></li>
+            <li><a href="#" class="hover:text-white transition">Contacto</a></li>
+            <li><a href="#" class="hover:text-white transition">Soporte</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Privacidad</a></li>
+            <li><a href="#" class="hover:text-white transition">Términos de uso</a></li>
+            <li><a href="#" class="hover:text-white transition">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-700 text-sm text-center">
+        <p>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> IGOR. Todos los derechos reservados.</p>
       </div>
     </div>
   </footer>
+
 </body>
 </html>

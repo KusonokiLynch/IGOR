@@ -35,7 +35,8 @@ public class DocumentacionController {
         model.addAttribute("documentacion", new Documentacion());
         return "Documentacion/Documentacion";
     }
-    // Mostrar  formulario nuevo documento mas creacion de este mismo 
+    
+    // Mostrar formulario nuevo documento mas creacion de este mismo 
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
@@ -60,22 +61,21 @@ public class DocumentacionController {
         return "redirect:/NuevoDocumento";
     }
 
-    
     @GetMapping("/Documentacion/editar")
     public String mostrarHistorial(Model model, Authentication authentication) {
         List<Documentacion> documentacion;
         
-        String rolUsuario = obtenerRolUsuarioActual(authentication);
+        // ✅ MODIFICADO: Obtener rol sin prefijo desde Spring Security
+        String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
         if ("DIRECTOR".equals(rolUsuario) || "SUPERVISOR".equals(rolUsuario)) {
             documentacion = repo.findAll();
         } else {
-            
             documentacion = repo.findByEstado("ACTIVO");
         }
         
         model.addAttribute("documentacion", documentacion);
-        model.addAttribute("rolActual", rolUsuario);
+        model.addAttribute("rol", rolUsuario); // ✅ CAMBIADO: Usar "rol" consistente con otros controladores
         model.addAttribute("esDirector", "DIRECTOR".equals(rolUsuario));
         model.addAttribute("esSupervisor", "SUPERVISOR".equals(rolUsuario));
         return "Documentacion/EditarDocumento";
@@ -94,52 +94,64 @@ public class DocumentacionController {
         return "redirect:/Documentacion/editar";
     }
 
-   
+    // ✅ MODIFICADO: Validar permisos y mostrar error 403
     @GetMapping("/Documentacion/eliminar/{id}")
-    public String eliminarDocumento(@PathVariable("id") String id) {
+    public String eliminarDocumento(@PathVariable("id") String id, Authentication authentication) {
+        
+        // ✅ MODIFICADO: Obtener rol sin prefijo
+        String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        
+        // ⛔ Verificar si tiene permisos
+        if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
+            return "error/403";
+        }
+        
+        // ✅ SÍ tiene permiso - Proceder con la eliminación
         Documentacion doc = repo.findById(id).orElse(null);
         if (doc != null) {
-            
             doc.setEstado("INACTIVO");
             repo.save(doc);
         }
         return "redirect:/Documentacion/editar";
     }
     
-    
+    // ✅ MODIFICADO: Validar permisos y mostrar error 403
     @GetMapping("/Documentacion/reactivar/{id}")
     public String reactivarDocumento(@PathVariable("id") String id, Authentication authentication) {
         
-        String rolUsuario = obtenerRolUsuarioActual(authentication);
+        // ✅ MODIFICADO: Obtener rol sin prefijo
+        String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
-        if ("DIRECTOR".equals(rolUsuario)|| "SUPERVISOR".equals(rolUsuario)) {
-            Documentacion doc = repo.findById(id).orElse(null);
-            if (doc != null && "INACTIVO".equals(doc.getEstado())) {
-                doc.setEstado("ACTIVO");
-                repo.save(doc);
-            }
+        // ⛔ Verificar si tiene permisos
+        if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
+            return "error/403";
+        }
+        
+        // ✅ SÍ tiene permiso - Proceder con la reactivación
+        Documentacion doc = repo.findById(id).orElse(null);
+        if (doc != null && "INACTIVO".equals(doc.getEstado())) {
+            doc.setEstado("ACTIVO");
+            repo.save(doc);
         }
         
         return "redirect:/Documentacion/editar";
     }
 
-    // Método para obtener el rol del usuario actual desde la base de datos
+    // ⚠️ DEPRECADO: Ya no es necesario buscar en la BD, usamos directamente Spring Security
+    @Deprecated
     private String obtenerRolUsuarioActual(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "INVITADO";
         }
         
         try {
-            // Obtener el nombre de usuario o correo desde la autenticación
             String username = authentication.getName();
-            
-            
             Usuario usuario = usuarioRepository.findByUsuario(username)
                 .or(() -> usuarioRepository.findByCorreo(username))
                 .orElse(null);
             
             if (usuario != null && usuario.getRol() != null) {
-                return usuario.getRol();
+                return usuario.getRol().replace("ROLE_", "");
             }
         } catch (Exception e) {
             System.err.println("Error al obtener rol del usuario: " + e.getMessage());
@@ -148,7 +160,7 @@ public class DocumentacionController {
         return "USUARIO"; 
     }
     
-    // Método auxiliar para obtener el nombre completo del usuario por si no pone propietario 
+    // Método auxiliar para obtener el nombre completo del usuario
     private String obtenerNombreUsuarioActual(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "Sistema";
@@ -173,7 +185,7 @@ public class DocumentacionController {
     // NUEVO: Formulario de carga masiva
     @GetMapping("/documentacion/carga")
     public String mostrarFormularioCarga(Model model) {
-        return "Documentacion/Documentacion"; // o una vista separada si quieres
+        return "Documentacion/Documentacion";
     }
 
     @PostMapping("/documentacion/carga")
@@ -184,17 +196,11 @@ public class DocumentacionController {
             return "Documentacion/Documentacion";
         }
 
-        // Crear comando
         CargarDocumentacionCommand comando = new CargarDocumentacionCommand(archivo, repo);
-
-        // Ejecutar comando directamente
         comando.execute();
 
-        // Agregar mensaje de éxito
         model.addAttribute("mensaje", "Archivo de documentos procesado correctamente!");
         model.addAttribute("tipoMensaje", "success");
-
-        // Mantener formulario limpio
         model.addAttribute("documentacion", new Documentacion());
 
         return "Documentacion/Documentacion";

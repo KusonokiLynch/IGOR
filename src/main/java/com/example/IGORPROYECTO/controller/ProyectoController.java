@@ -1,7 +1,10 @@
 package com.example.IGORPROYECTO.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +47,11 @@ public class ProyectoController {
     }
 
     @GetMapping("/consultar")
-    public String consultarProyectos(Model model) {
+    public String consultarProyectos(Model model, Authentication auth) {
         List<Proyecto> proyectos = proyectoService.consultarTodos();
+        
+        // ✅ AGREGADO: Obtener rol del usuario
+        String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
         // Calcular estadísticas
         long totalProyectos = proyectos.size();
@@ -59,8 +65,19 @@ public class ProyectoController {
             .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
             .count();
         
+        // Crear Map de estadísticas
+        Map<String, Long> estadisticas = new HashMap<>();
+        estadisticas.put("totalProyectos", totalProyectos);
+        estadisticas.put("activos", activos);
+        estadisticas.put("enEjecucion", enEjecucion);
+        estadisticas.put("finalizados", finalizados);
+        
         // Pasar datos al modelo
         model.addAttribute("proyectos", proyectos);
+        model.addAttribute("estadisticas", estadisticas);
+        model.addAttribute("rol", rol); // ✅ AGREGADO
+        
+        // Mantener compatibilidad
         model.addAttribute("totalProyectos", totalProyectos);
         model.addAttribute("activos", activos);
         model.addAttribute("enEjecucion", enEjecucion);

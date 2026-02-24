@@ -30,7 +30,7 @@ public class ProyectoController {
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
         model.addAttribute("proyecto", new Proyecto());
-        return "proyectos/nuevo";
+        return "Proyectos/nuevo";
     }
 
     // Guardar proyecto (POST)
@@ -43,7 +43,7 @@ public class ProyectoController {
     @GetMapping
     public String menuProyectos(Model model) {
         model.addAttribute("proyectos", proyectoService.menuTodos());
-        return "proyectos/menu";
+        return "Proyectos/menu";
     }
 
     @GetMapping("/consultar")
@@ -83,7 +83,7 @@ public class ProyectoController {
         model.addAttribute("enEjecucion", enEjecucion);
         model.addAttribute("finalizados", finalizados);
         
-        return "proyectos/consultar";
+        return "Proyectos/consultar";
     }
 
     // Mostrar formulario de edición
@@ -91,7 +91,7 @@ public class ProyectoController {
     public String mostrarFormularioEdicion(@PathVariable String id, Model model) {
         Proyecto proyecto = proyectoService.buscarPorId(id);
         model.addAttribute("proyecto", proyecto);
-        return "proyectos/editar";
+        return "Proyectos/editar";
     }
 
     // Guardar cambios del proyecto editado

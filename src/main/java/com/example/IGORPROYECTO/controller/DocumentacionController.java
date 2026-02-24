@@ -103,7 +103,7 @@ public class DocumentacionController {
         
         // ⛔ Verificar si tiene permisos
         if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
-            return "error/403";
+            return "Error/403";
         }
         
         // ✅ SÍ tiene permiso - Proceder con la eliminación
@@ -124,7 +124,7 @@ public class DocumentacionController {
         
         // ⛔ Verificar si tiene permisos
         if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
-            return "error/403";
+            return "Error/403";
         }
         
         // ✅ SÍ tiene permiso - Proceder con la reactivación

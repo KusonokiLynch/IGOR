@@ -64,7 +64,7 @@ public class RecursoController {
         model.addAttribute("noDisponibles", noDisponibles);
         model.addAttribute("asignados", asignados);
         
-        return "recursos/menuRecurso";
+        return "Recursos/menuRecurso";
     }
 
     // Disponibles con estadísticas
@@ -106,14 +106,14 @@ public class RecursoController {
         model.addAttribute("noDisponibles", noDisponibles);
         model.addAttribute("asignados", asignados);
         
-        return "recursos/recursoDisponible";
+        return "Recursos/recursoDisponible";
     }
 
     // Formulario para crear nuevo recurso
     @GetMapping("/recursoNuevo")
     public String nuevo(Model model) {
         model.addAttribute("recurso", new Recurso());
-        return "recursos/recursoNuevo";
+        return "Recursos/recursoNuevo";
     }
 
     // Guardar recurso
@@ -129,7 +129,7 @@ public class RecursoController {
         Recurso recurso = recursoService.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
         model.addAttribute("recurso", recurso);
-        return "recursos/editar";
+        return "Recursos/editar";
     }
 
     // Actualizar recurso

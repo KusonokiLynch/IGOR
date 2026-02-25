@@ -33,18 +33,18 @@ public class DocumentacionController {
     @GetMapping("/documentacion")
     public String mostrarDocumentacion(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "Documentacion/Documentacion";
+        return "documentacion/Documentacion";
     }
     
     // Mostrar formulario nuevo documento mas creacion de este mismo 
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "Documentacion/NuevoDocumento";
+        return "documentacion/NuevoDocumento";
     }
 
     // Guardar el documento en /Documentacion/guardar
-    @PostMapping("/Documentacion/guardar")
+    @PostMapping("/documentacion/guardar")
     public String guardarDocumento(@ModelAttribute Documentacion documentacion, Authentication authentication) {
         documentacion.setFechaCreacion(new Date());
         
@@ -61,7 +61,7 @@ public class DocumentacionController {
         return "redirect:/NuevoDocumento";
     }
 
-    @GetMapping("/Documentacion/editar")
+    @GetMapping("/documentacion/editar")
     public String mostrarHistorial(Model model, Authentication authentication) {
         List<Documentacion> documentacion;
         
@@ -78,10 +78,10 @@ public class DocumentacionController {
         model.addAttribute("rol", rolUsuario); // ✅ CAMBIADO: Usar "rol" consistente con otros controladores
         model.addAttribute("esDirector", "DIRECTOR".equals(rolUsuario));
         model.addAttribute("esSupervisor", "SUPERVISOR".equals(rolUsuario));
-        return "Documentacion/EditarDocumento";
+        return "documentacion/EditarDocumento";
     }
 
-    @PostMapping("/Documentacion/editar")
+    @PostMapping("/documentacion/editar")
     public String editarDocumento(@ModelAttribute Documentacion documentacion) {
         
         Documentacion docExistente = repo.findById(documentacion.getId()).orElse(null);
@@ -91,11 +91,11 @@ public class DocumentacionController {
             documentacion.setFechaCreacion(new Date());
         }
         repo.save(documentacion);
-        return "redirect:/Documentacion/editar";
+        return "redirect:/documentacion/editar";
     }
 
     // ✅ MODIFICADO: Validar permisos y mostrar error 403
-    @GetMapping("/Documentacion/eliminar/{id}")
+    @GetMapping("/documentacion/eliminar/{id}")
     public String eliminarDocumento(@PathVariable("id") String id, Authentication authentication) {
         
         // ✅ MODIFICADO: Obtener rol sin prefijo
@@ -112,11 +112,11 @@ public class DocumentacionController {
             doc.setEstado("INACTIVO");
             repo.save(doc);
         }
-        return "redirect:/Documentacion/editar";
+        return "redirect:/documentacion/editar";
     }
     
     // ✅ MODIFICADO: Validar permisos y mostrar error 403
-    @GetMapping("/Documentacion/reactivar/{id}")
+    @GetMapping("/documentacion/reactivar/{id}")
     public String reactivarDocumento(@PathVariable("id") String id, Authentication authentication) {
         
         // ✅ MODIFICADO: Obtener rol sin prefijo
@@ -134,7 +134,7 @@ public class DocumentacionController {
             repo.save(doc);
         }
         
-        return "redirect:/Documentacion/editar";
+        return "redirect:/documentacion/editar";
     }
 
     // ⚠️ DEPRECADO: Ya no es necesario buscar en la BD, usamos directamente Spring Security
@@ -185,7 +185,7 @@ public class DocumentacionController {
     // NUEVO: Formulario de carga masiva
     @GetMapping("/documentacion/carga")
     public String mostrarFormularioCarga(Model model) {
-        return "Documentacion/Documentacion";
+        return "documentacion/documentacion";
     }
 
     @PostMapping("/documentacion/carga")
@@ -193,7 +193,7 @@ public class DocumentacionController {
         if (archivo.isEmpty()) {
             model.addAttribute("mensaje", "Por favor selecciona un archivo CSV válido.");
             model.addAttribute("tipoMensaje", "error");
-            return "Documentacion/Documentacion";
+            return "documentacion/documentacion";
         }
 
         CargarDocumentacionCommand comando = new CargarDocumentacionCommand(archivo, repo);
@@ -203,6 +203,6 @@ public class DocumentacionController {
         model.addAttribute("tipoMensaje", "success");
         model.addAttribute("documentacion", new Documentacion());
 
-        return "Documentacion/Documentacion";
+        return "documentacion/documentacion";
     }   
 }

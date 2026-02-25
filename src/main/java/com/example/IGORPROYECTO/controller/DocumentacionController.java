@@ -33,18 +33,18 @@ public class DocumentacionController {
     @GetMapping("/documentacion")
     public String mostrarDocumentacion(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "documentacion/Documentacion";
+        return "Documentacion/Documentacion";
     }
     
     // Mostrar formulario nuevo documento mas creacion de este mismo 
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "documentacion/NuevoDocumento";
+        return "Documentacion/NuevoDocumento";
     }
 
     // Guardar el documento en /Documentacion/guardar
-    @PostMapping("/documentacion/guardar")
+    @PostMapping("/Documentacion/guardar")
     public String guardarDocumento(@ModelAttribute Documentacion documentacion, Authentication authentication) {
         documentacion.setFechaCreacion(new Date());
         
@@ -61,7 +61,7 @@ public class DocumentacionController {
         return "redirect:/NuevoDocumento";
     }
 
-    @GetMapping("/documentacion/editar")
+    @GetMapping("/Documentacion/editar")
     public String mostrarHistorial(Model model, Authentication authentication) {
         List<Documentacion> documentacion;
         
@@ -78,10 +78,10 @@ public class DocumentacionController {
         model.addAttribute("rol", rolUsuario); // ✅ CAMBIADO: Usar "rol" consistente con otros controladores
         model.addAttribute("esDirector", "DIRECTOR".equals(rolUsuario));
         model.addAttribute("esSupervisor", "SUPERVISOR".equals(rolUsuario));
-        return "documentacion/EditarDocumento";
+        return "Documentacion/EditarDocumento";
     }
 
-    @PostMapping("/documentacion/editar")
+    @PostMapping("/Documentacion/editar")
     public String editarDocumento(@ModelAttribute Documentacion documentacion) {
         
         Documentacion docExistente = repo.findById(documentacion.getId()).orElse(null);
@@ -185,7 +185,7 @@ public class DocumentacionController {
     // NUEVO: Formulario de carga masiva
     @GetMapping("/documentacion/carga")
     public String mostrarFormularioCarga(Model model) {
-        return "documentacion/documentacion";
+        return "Documentacion/documentacion";
     }
 
     @PostMapping("/documentacion/carga")
@@ -193,7 +193,7 @@ public class DocumentacionController {
         if (archivo.isEmpty()) {
             model.addAttribute("mensaje", "Por favor selecciona un archivo CSV válido.");
             model.addAttribute("tipoMensaje", "error");
-            return "documentacion/documentacion";
+            return "Documentacion/documentacion";
         }
 
         CargarDocumentacionCommand comando = new CargarDocumentacionCommand(archivo, repo);
@@ -203,6 +203,6 @@ public class DocumentacionController {
         model.addAttribute("tipoMensaje", "success");
         model.addAttribute("documentacion", new Documentacion());
 
-        return "documentacion/documentacion";
+        return "Documentacion/documentacion";
     }   
 }

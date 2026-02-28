@@ -58,7 +58,7 @@ public class SecurityConfig {
 
                 // Análisis y Reportes
                 .requestMatchers("/analisis/kpi/**").hasRole("DIRECTOR")
-                .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR","DIRECTOR")
+                .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR","DIRECTOR","CLIENTE")
                 .requestMatchers("/analisis/peticiones/**").hasAnyRole("DIRECTOR", "CLIENTE", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/analisis/**").authenticated()
 

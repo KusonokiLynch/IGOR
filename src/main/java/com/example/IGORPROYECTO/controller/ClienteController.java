@@ -41,12 +41,12 @@ public class ClienteController {
     @GetMapping("/Documentacion/ListaDocumentos")
     public String listaDocumentos(Model model) {
         model.addAttribute("clientes", usuarioService.listarTodos());
-        return "documentacion/ListaDocumentos"; // ListaClientes.html
+        return "Documentacion/ListaDocumentos"; // ListaClientes.html
     }
 
     @GetMapping("/Documentacion/NuevoDocumento")
     public String nuevoDocumento(Model model) {
         model.addAttribute("clientes", usuarioService.listarTodos());
-        return "documentacion/NuevoDocumento"; // ListaClientes.html
+        return "Documentacion/NuevoDocumento"; // ListaClientes.html
     }
 }

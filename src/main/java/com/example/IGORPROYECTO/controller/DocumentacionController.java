@@ -33,7 +33,7 @@ public class DocumentacionController {
     @GetMapping("/documentacion")
     public String mostrarDocumentacion(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "Documentacion/Documentacion";
+        return "Documentacion/documentacion";
     }
     
     // Mostrar formulario nuevo documento mas creacion de este mismo 

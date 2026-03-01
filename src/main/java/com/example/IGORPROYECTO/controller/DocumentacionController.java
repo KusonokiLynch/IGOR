@@ -29,47 +29,43 @@ public class DocumentacionController {
     @Autowired
     private UsuarioRepository usuarioRepository; 
 
-    // Mostrar el formulario en /Documentacion
     @GetMapping("/documentacion")
     public String mostrarDocumentacion(Model model) {
         model.addAttribute("documentacion", new Documentacion());
         return "Documentacion/documentacion";
     }
     
-    // Mostrar formulario nuevo documento mas creacion de este mismo 
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
         return "Documentacion/NuevoDocumento";
     }
 
-    // Guardar el documento en /Documentacion/guardar
     @PostMapping("/Documentacion/guardar")
     public String guardarDocumento(@ModelAttribute Documentacion documentacion, Authentication authentication) {
-    documentacion.setFechaCreacion(new Date());
-    
-    if (documentacion.getEstado() != null) {
-        documentacion.setEstado(documentacion.getEstado().toUpperCase());
-    }
-    
-    if (documentacion.getEstado() == null || documentacion.getEstado().isEmpty()) {
-        documentacion.setEstado("ACTIVO");
-    }
-    
-    if (documentacion.getPropietario() == null || documentacion.getPropietario().isEmpty()) {
-        String nombreUsuario = obtenerNombreUsuarioActual(authentication);
-        documentacion.setPropietario(nombreUsuario);
-    }
-    
+        documentacion.setFechaCreacion(new Date());
+        
+        if (documentacion.getEstado() != null) {
+            documentacion.setEstado(documentacion.getEstado().toUpperCase());
+        }
+        
+        if (documentacion.getEstado() == null || documentacion.getEstado().isEmpty()) {
+            documentacion.setEstado("ACTIVO");
+        }
+        
+        if (documentacion.getPropietario() == null || documentacion.getPropietario().isEmpty()) {
+            String nombreUsuario = obtenerNombreUsuarioActual(authentication);
+            documentacion.setPropietario(nombreUsuario);
+        }
+        
         repo.save(documentacion);
-        return "redirect:/NuevoDocumento";
+        return "redirect:/Documentacion/editar";
     }
 
     @GetMapping("/Documentacion/editar")
     public String mostrarHistorial(Model model, Authentication authentication) {
         List<Documentacion> documentacion;
         
-        // ✅ MODIFICADO: Obtener rol sin prefijo desde Spring Security
         String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
         if ("DIRECTOR".equals(rolUsuario) || "SUPERVISOR".equals(rolUsuario)) {
@@ -79,7 +75,7 @@ public class DocumentacionController {
         }
         
         model.addAttribute("documentacion", documentacion);
-        model.addAttribute("rol", rolUsuario); // ✅ CAMBIADO: Usar "rol" consistente con otros controladores
+        model.addAttribute("rol", rolUsuario);
         model.addAttribute("esDirector", "DIRECTOR".equals(rolUsuario));
         model.addAttribute("esSupervisor", "SUPERVISOR".equals(rolUsuario));
         return "Documentacion/EditarDocumento";
@@ -95,53 +91,44 @@ public class DocumentacionController {
             documentacion.setFechaCreacion(new Date());
         }
         repo.save(documentacion);
-        return "redirect:/documentacion/editar";
+        return "redirect:/Documentacion/editar";
     }
 
-    // ✅ MODIFICADO: Validar permisos y mostrar error 403
     @GetMapping("/documentacion/eliminar/{id}")
     public String eliminarDocumento(@PathVariable("id") String id, Authentication authentication) {
         
-        // ✅ MODIFICADO: Obtener rol sin prefijo
         String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
-        // ⛔ Verificar si tiene permisos
         if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
             return "Error/403";
         }
         
-        // ✅ SÍ tiene permiso - Proceder con la eliminación
         Documentacion doc = repo.findById(id).orElse(null);
         if (doc != null) {
             doc.setEstado("INACTIVO");
             repo.save(doc);
         }
-        return "redirect:/documentacion/editar";
+        return "redirect:/Documentacion/editar";
     }
     
-    // ✅ MODIFICADO: Validar permisos y mostrar error 403
     @GetMapping("/documentacion/reactivar/{id}")
     public String reactivarDocumento(@PathVariable("id") String id, Authentication authentication) {
         
-        // ✅ MODIFICADO: Obtener rol sin prefijo
         String rolUsuario = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
-        // ⛔ Verificar si tiene permisos
         if (!"DIRECTOR".equals(rolUsuario) && !"SUPERVISOR".equals(rolUsuario)) {
             return "Error/403";
         }
         
-        // ✅ SÍ tiene permiso - Proceder con la reactivación
         Documentacion doc = repo.findById(id).orElse(null);
         if (doc != null && "INACTIVO".equals(doc.getEstado())) {
             doc.setEstado("ACTIVO");
             repo.save(doc);
         }
         
-        return "redirect:/documentacion/editar";
+        return "redirect:/Documentacion/editar";
     }
 
-    // ⚠️ DEPRECADO: Ya no es necesario buscar en la BD, usamos directamente Spring Security
     @Deprecated
     private String obtenerRolUsuarioActual(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -164,7 +151,6 @@ public class DocumentacionController {
         return "USUARIO"; 
     }
     
-    // Método auxiliar para obtener el nombre completo del usuario
     private String obtenerNombreUsuarioActual(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "Sistema";
@@ -186,7 +172,6 @@ public class DocumentacionController {
         return authentication.getName();
     }
 
-    // NUEVO: Formulario de carga masiva
     @GetMapping("/documentacion/carga")
     public String mostrarFormularioCarga(Model model) {
         return "Documentacion/documentacion";

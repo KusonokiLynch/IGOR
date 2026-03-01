@@ -40,7 +40,7 @@ public class DocumentacionController {
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "Documentacion/NuevoDocumento";
+        return "redirect:/Documentacion/editar";
     }
 
     // Guardar el documento en /Documentacion/guardar

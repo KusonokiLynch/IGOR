@@ -40,7 +40,7 @@ public class DocumentacionController {
     @GetMapping("/NuevoDocumento")
     public String mostrarFormulario(Model model) {
         model.addAttribute("documentacion", new Documentacion());
-        return "redirect:/Documentacion/editar";
+        return "Documentacion/NuevoDocumento";
     }
 
     // Guardar el documento en /Documentacion/guardar
@@ -58,7 +58,7 @@ public class DocumentacionController {
         }
         
         repo.save(documentacion);
-        return "redirect:/Documentacion/editar";
+        return "redirect:/NuevoDocumento";
     }
 
     @GetMapping("/Documentacion/editar")
@@ -91,7 +91,7 @@ public class DocumentacionController {
             documentacion.setFechaCreacion(new Date());
         }
         repo.save(documentacion);
-        return "redirect:/documentacion/NuevoDocumento";
+        return "redirect:/documentacion/editar";
     }
 
     // ✅ MODIFICADO: Validar permisos y mostrar error 403

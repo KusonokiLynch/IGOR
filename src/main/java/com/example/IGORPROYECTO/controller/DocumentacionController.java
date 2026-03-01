@@ -58,7 +58,7 @@ public class DocumentacionController {
         }
         
         repo.save(documentacion);
-        return "redirect:/NuevoDocumento";
+        return "redirect:/Documentacion/editar";
     }
 
     @GetMapping("/Documentacion/editar")

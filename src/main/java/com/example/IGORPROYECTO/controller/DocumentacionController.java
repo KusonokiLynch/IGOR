@@ -91,7 +91,7 @@ public class DocumentacionController {
             documentacion.setFechaCreacion(new Date());
         }
         repo.save(documentacion);
-        return "redirect:/documentacion/editar";
+        return "redirect:/documentacion/NuevoDocumento";
     }
 
     // ✅ MODIFICADO: Validar permisos y mostrar error 403

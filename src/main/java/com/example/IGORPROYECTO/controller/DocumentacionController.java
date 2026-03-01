@@ -46,17 +46,21 @@ public class DocumentacionController {
     // Guardar el documento en /Documentacion/guardar
     @PostMapping("/Documentacion/guardar")
     public String guardarDocumento(@ModelAttribute Documentacion documentacion, Authentication authentication) {
-        documentacion.setFechaCreacion(new Date());
-        
-        if (documentacion.getEstado() == null || documentacion.getEstado().isEmpty()) {
-            documentacion.setEstado("ACTIVO");
-        }
-        
-        if (documentacion.getPropietario() == null || documentacion.getPropietario().isEmpty()) {
-            String nombreUsuario = obtenerNombreUsuarioActual(authentication);
-            documentacion.setPropietario(nombreUsuario);
-        }
-        
+    documentacion.setFechaCreacion(new Date());
+    
+    if (documentacion.getEstado() != null) {
+        documentacion.setEstado(documentacion.getEstado().toUpperCase());
+    }
+    
+    if (documentacion.getEstado() == null || documentacion.getEstado().isEmpty()) {
+        documentacion.setEstado("ACTIVO");
+    }
+    
+    if (documentacion.getPropietario() == null || documentacion.getPropietario().isEmpty()) {
+        String nombreUsuario = obtenerNombreUsuarioActual(authentication);
+        documentacion.setPropietario(nombreUsuario);
+    }
+    
         repo.save(documentacion);
         return "redirect:/NuevoDocumento";
     }

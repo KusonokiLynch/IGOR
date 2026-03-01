@@ -128,7 +128,7 @@
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="docsBody">
+                            <tbody class="bg-white divide-y divide-gray-200">
 
                                 <!-- Mensaje si no hay documentos -->
                                 <tr th:if="${#lists.isEmpty(documentacion)}">
@@ -170,7 +170,8 @@
                                         <button th:if="${esDirector or esSupervisor}"
                                             type="button"
                                             class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition gap-1 text-sm font-medium"
-                                            th:onclick="'abrirModal(\'' + ${doc.id} + '\',\'' + ${doc.nombre} + '\',\'' + ${doc.nombreProyecto} + '\',\'' + ${doc.tipo} + '\',\'' + ${doc.descripcion} + '\',\'' + ${doc.estado} + '\',\'' + ${doc.propietario} + '\')'">
+                                            th:attr="data-id=${doc.id},data-nombre=${doc.nombre},data-proyecto=${doc.nombreProyecto},data-tipo=${doc.tipo},data-descripcion=${doc.descripcion},data-estado=${doc.estado},data-propietario=${doc.propietario}"
+                                            onclick="abrirModalDesdeData(this)">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
@@ -229,7 +230,7 @@
                 </button>
             </div>
 
-            <form id="formEditar" th:action="@{/Documentacion/editar}" method="post" class="space-y-4">
+            <form th:action="@{/Documentacion/editar}" method="post" class="space-y-4">
                 <input type="hidden" id="editId" name="id" />
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -283,15 +284,14 @@
     </div>
 
     <script>
-        // Modal
-        function abrirModal(id, nombre, proyecto, tipo, descripcion, estado, propietario) {
-            document.getElementById('editId').value = id;
-            document.getElementById('editNombre').value = nombre;
-            document.getElementById('editProyecto').value = proyecto;
-            document.getElementById('editTipo').value = tipo;
-            document.getElementById('editDescripcion').value = descripcion;
-            document.getElementById('editEstado').value = estado;
-            document.getElementById('editPropietario').value = propietario;
+        function abrirModalDesdeData(btn) {
+            document.getElementById('editId').value = btn.dataset.id;
+            document.getElementById('editNombre').value = btn.dataset.nombre;
+            document.getElementById('editProyecto').value = btn.dataset.proyecto;
+            document.getElementById('editTipo').value = btn.dataset.tipo;
+            document.getElementById('editDescripcion').value = btn.dataset.descripcion;
+            document.getElementById('editEstado').value = btn.dataset.estado;
+            document.getElementById('editPropietario').value = btn.dataset.propietario;
             document.getElementById('modalEditar').style.display = 'flex';
         }
 
@@ -299,12 +299,10 @@
             document.getElementById('modalEditar').style.display = 'none';
         }
 
-        // Cerrar modal al hacer click fuera
         document.getElementById('modalEditar').addEventListener('click', function(e) {
             if (e.target === this) cerrarModal();
         });
 
-        // Búsqueda
         document.getElementById('searchInput').addEventListener('keyup', function() {
             const searchTerm = this.value.toLowerCase();
             const rows = document.querySelectorAll('.doc-row');

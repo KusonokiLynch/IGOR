@@ -19,9 +19,6 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    
-
-
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
@@ -31,19 +28,19 @@ public class UsuarioController {
         return "index";
     }
 
-    
     @GetMapping("/miPerfil")
     public String verUsuarioLogueado(Model model, Authentication authentication) {
-        String username = authentication.getName(); // usuario logueado
+        String username = authentication.getName();
         Usuario usuario = usuarioService.buscarPorUsuario(username);
         model.addAttribute("usuario", usuario);
-        return "usuarios"; // usuarios.html
+        return "usuarios";
     }
 
-    
     @GetMapping("/usuarios")
-    public String listarUsuarios(Model model) {
+    public String listarUsuarios(Model model, Authentication authentication) {
+        String rol = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         model.addAttribute("usuarios", usuarioService.listarTodos());
+        model.addAttribute("rol", rol);
         return "usuarios";
     }
 
@@ -72,7 +69,6 @@ public class UsuarioController {
         return "redirect:/clientes";
     }
 
-        // NUEVO: Formulario de carga masiva
     @GetMapping("/usuarios/carga")
     public String mostrarFormularioCarga(Model model) {
         return "cargaUsuarios";     
@@ -80,15 +76,10 @@ public class UsuarioController {
 
     @PostMapping("/usuarios/carga")
     public String cargarUsuarios(@RequestParam("archivo") MultipartFile archivo, Model model) {
-    // Crear comando
-    CargarUsuarioCommand comando = new CargarUsuarioCommand(archivo, usuarioService);
-    // Ejecutar el comando directamente
-    comando.execute();
-    // Agregar mensaje de éxito
-    model.addAttribute("mensaje", "Archivo de usuarios procesado correctamente!");
-    // Retornar la misma plantilla de registro
-    model.addAttribute("usuario", new Usuario()); // para mantener el formulario limpio
-    return "registro"; 
-} 
-
+        CargarUsuarioCommand comando = new CargarUsuarioCommand(archivo, usuarioService);
+        comando.execute();
+        model.addAttribute("mensaje", "Archivo de usuarios procesado correctamente!");
+        model.addAttribute("usuario", new Usuario());
+        return "registro"; 
+    } 
 }

@@ -38,15 +38,18 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-300">
-              <tr th:each="c : ${clientes}">
+              <tr th:each="c : ${usuarios}">
                 <td class="px-6 py-3" th:text="${c.id}">ID</td>
                 <td class="px-6 py-3" th:text="${c.nombre_completo}">Nombre</td>
                 <td class="px-6 py-3" th:text="${c.usuario}">Usuario</td>
                 <td class="px-6 py-3" th:text="${c.correo}">Correo</td>
                 <td class="px-6 py-3" th:text="${c.rol}">Rol</td>
                 <td class="px-6 py-3">
-                  <a th:href="@{'/cliente/' + ${c.id}}" 
+                  <a th:if="${rol == 'DIRECTOR' or rol == 'SUPERVISOR' or rol == 'TRABAJADOR'}"
+                     th:href="@{'/cliente/' + ${c.id}}" 
                      class="text-indigo-600 hover:underline">Editar</a>
+                  <span th:if="${rol == 'CLIENTE'}" 
+                        class="text-gray-400 text-sm italic">Sin acceso</span>
                 </td>
               </tr>
             </tbody>

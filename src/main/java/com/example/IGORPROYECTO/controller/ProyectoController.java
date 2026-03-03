@@ -26,14 +26,12 @@ public class ProyectoController {
         this.proyectoService = proyectoService;
     }
 
-    // Mostrar formulario para crear nuevo proyecto
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
         model.addAttribute("proyecto", new Proyecto());
         return "Proyectos/nuevo";
     }
 
-    // Guardar proyecto (POST)
     @PostMapping("/nuevo")
     public String guardarProyecto(@ModelAttribute Proyecto proyecto) {
         proyectoService.nuevo(proyecto);
@@ -50,10 +48,8 @@ public class ProyectoController {
     public String consultarProyectos(Model model, Authentication auth) {
         List<Proyecto> proyectos = proyectoService.consultarTodos();
         
-        // ✅ AGREGADO: Obtener rol del usuario
         String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
         
-        // Calcular estadísticas
         long totalProyectos = proyectos.size();
         long activos = proyectos.stream()
             .filter(p -> "Activo".equalsIgnoreCase(p.getEstado()))
@@ -65,19 +61,15 @@ public class ProyectoController {
             .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
             .count();
         
-        // Crear Map de estadísticas
         Map<String, Long> estadisticas = new HashMap<>();
         estadisticas.put("totalProyectos", totalProyectos);
         estadisticas.put("activos", activos);
         estadisticas.put("enEjecucion", enEjecucion);
         estadisticas.put("finalizados", finalizados);
         
-        // Pasar datos al modelo
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("estadisticas", estadisticas);
-        model.addAttribute("rol", rol); // ✅ AGREGADO
-        
-        // Mantener compatibilidad
+        model.addAttribute("rol", rol);
         model.addAttribute("totalProyectos", totalProyectos);
         model.addAttribute("activos", activos);
         model.addAttribute("enEjecucion", enEjecucion);
@@ -86,7 +78,6 @@ public class ProyectoController {
         return "Proyectos/consultar";
     }
 
-    // Mostrar formulario de edición
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable String id, Model model) {
         Proyecto proyecto = proyectoService.buscarPorId(id);
@@ -94,10 +85,21 @@ public class ProyectoController {
         return "Proyectos/editar";
     }
 
-    // Guardar cambios del proyecto editado
     @PostMapping("/editar/{id}")
     public String guardarCambios(@PathVariable String id, @ModelAttribute Proyecto proyecto) {
         proyectoService.actualizar(id, proyecto);
+        return "redirect:/proyectos/consultar";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminarProyecto(@PathVariable String id, Authentication auth) {
+        String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        
+        if (!"DIRECTOR".equals(rol) && !"SUPERVISOR".equals(rol)) {
+            return "Error/403";
+        }
+        
+        proyectoService.eliminar(id);
         return "redirect:/proyectos/consultar";
     }
 }

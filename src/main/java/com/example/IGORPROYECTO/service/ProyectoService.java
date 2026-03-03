@@ -22,28 +22,23 @@ public class ProyectoService {
         this.documentacionRepository = documentacionRepository;
     }
 
-    // Listar todos los proyectos
     public List<Proyecto> menuTodos() {
         return proyectoRepository.findAll();
     }
 
-    // Crear un proyecto
     public Proyecto nuevo(Proyecto proyecto) {
         proyecto.setFechaCreacion(new Date());
         return proyectoRepository.save(proyecto);
     }
 
-    // Consultar todos los proyectos
     public List<Proyecto> consultarTodos() {
         return proyectoRepository.findAll();
     }
 
-    // Buscar proyecto por id (String porque Mongo usa String en @Id)
     public Proyecto buscarPorId(String id) {
         return proyectoRepository.findById(id).orElse(null);
     }
 
-    // Actualizar proyecto
     public Proyecto actualizar(String id, Proyecto proyectoActualizado) {
         return proyectoRepository.findById(id).map(proyecto -> {
             proyecto.setNombre(proyectoActualizado.getNombre());
@@ -59,13 +54,15 @@ public class ProyectoService {
         }).orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + id));
     }
 
-    // === NUEVO: Obtener documentación relacionada a un proyecto ===
+    public void eliminar(String id) {
+        proyectoRepository.deleteById(id);
+    }
+
     public List<Documentacion> obtenerDocumentacionRelacionada(String idProyecto) {
         Proyecto proyecto = buscarPorId(idProyecto);
         if (proyecto == null) {
             throw new RuntimeException("Proyecto no encontrado con id: " + idProyecto);
         }
-        // Busca por el campo nombreProyecto en Documentacion
         return documentacionRepository.findByNombreProyecto(proyecto.getNombre());
     }
 }

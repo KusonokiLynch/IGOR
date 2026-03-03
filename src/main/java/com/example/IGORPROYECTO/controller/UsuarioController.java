@@ -37,10 +37,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios")
-    public String listarUsuarios(Model model, Authentication authentication) {
-        String rol = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+    public String listarUsuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.listarTodos());
-        model.addAttribute("rol", rol);
         return "usuarios";
     }
 

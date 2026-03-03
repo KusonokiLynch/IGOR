@@ -1,6 +1,5 @@
 package com.example.IGORPROYECTO.service;
 
-import com.example.IGORPROYECTO.model.Proyecto;
 import com.example.IGORPROYECTO.model.Recurso;
 import com.example.IGORPROYECTO.repository.RecursoRepository;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,11 @@ public class RecursoService {
         return recursoRepository.findAll();
     }
 
-     // consultar todos los proyectos
     public List<Recurso> consultarRecursos() {
         return recursoRepository.findAll();
-
     }
-      public List<Recurso> recursoDisponible() {
+
+    public List<Recurso> recursoDisponible() {
         return recursoRepository.findByDisponibilidad(true);
     }
 
@@ -41,7 +39,23 @@ public class RecursoService {
     public void eliminar(String id) {
         recursoRepository.deleteById(id);
     }
+
+    public Recurso asignar(String recursoId, String usuarioId) {
+        Recurso recurso = recursoRepository.findById(recursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado: " + recursoId));
+
+        if (!recurso.getAsignadoA().contains(usuarioId)) {
+            recurso.getAsignadoA().add(usuarioId);
+        }
+
+        return recursoRepository.save(recurso);
+    }
+
+    public Recurso desasignar(String recursoId, String usuarioId) {
+        Recurso recurso = recursoRepository.findById(recursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado: " + recursoId));
+
+        recurso.getAsignadoA().remove(usuarioId);
+        return recursoRepository.save(recurso);
+    }
 }
-
-
-

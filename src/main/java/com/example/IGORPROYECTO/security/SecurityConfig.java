@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.example.IGORPROYECTO.service.UserDetailsServiceImpl;
 
@@ -37,6 +38,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     @Bean
@@ -94,6 +100,12 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
+            )
+            // Control de sesiones concurrentes
+            .sessionManagement(session -> session
+                .maximumSessions(1) // Solo 1 sesión activa por usuario
+                .expiredUrl("/login?expired") // URL si la sesión expira
+                .maxSessionsPreventsLogin(false) // Si true: rechaza nuevo login. Si false: cierra sesión anterior
             )
             // AGREGAR ESTO: Manejo de errores de acceso
             .exceptionHandling(exception -> exception

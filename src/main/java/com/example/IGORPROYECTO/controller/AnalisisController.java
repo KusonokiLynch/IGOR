@@ -18,6 +18,9 @@ import com.example.IGORPROYECTO.model.Kpis;
 import com.example.IGORPROYECTO.model.Peticion;
 import com.example.IGORPROYECTO.model.Proyecto;
 
+import com.example.IGORPROYECTO.dto.KpisDTO;
+import com.example.IGORPROYECTO.dto.PeticionDTO;
+
 import com.example.IGORPROYECTO.repository.DocumentacionRepository;
 import com.example.IGORPROYECTO.repository.ProyectoRepository;
 
@@ -27,8 +30,9 @@ import com.example.IGORPROYECTO.service.ProyectoService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Controller
 @RequestMapping("/analisis")
 @RequiredArgsConstructor
@@ -43,7 +47,7 @@ public class AnalisisController {
 
     // ==================== REPORTES / GENERAR PDF ====================
     @GetMapping("/reporte")
-        public String mostrarFormulario(Model model) {
+    public String mostrarFormulario(Model model) {
         model.addAttribute("proyectos", proyectoRepository.findAll());
         return "AnalisisYReportes/generarReporte";
     }
@@ -69,13 +73,14 @@ public class AnalisisController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error generando PDF para proyecto: {}", idProyecto, e);
             try {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Error al generar PDF: " + e.getMessage());
+                        "Error al generar PDF");
             } catch (Exception ignored) {}
         }
     }
+
     // ==================== MENÚ PRINCIPAL ====================
     @GetMapping("")
     public String menuAnalisis(Model model) {
@@ -87,18 +92,20 @@ public class AnalisisController {
     // ==================== KPIs ====================
     @GetMapping("/kpi")
     public String registrarKPI(Model model) {
-        model.addAttribute("kpi", new Kpis());
+        model.addAttribute("kpi", new KpisDTO());
         model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
         return "AnalisisYReportes/registrarKPI";
     }
 
     @PostMapping("/kpi/guardar")
-    public String guardarKPI(@ModelAttribute Kpis kpi, RedirectAttributes redirectAttributes) {
+    public String guardarKPI(@ModelAttribute KpisDTO kpiDTO, RedirectAttributes redirectAttributes) {
         try {
+            Kpis kpi = convertirDTOaKpis(kpiDTO);
             analisisService.crearKPI(kpi);
             redirectAttributes.addFlashAttribute("mensaje", "KPI registrado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al registrar KPI", e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al registrar KPI: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
@@ -107,20 +114,29 @@ public class AnalisisController {
 
     @GetMapping("/kpi/editar/{id}")
     public String editarKPI(@PathVariable String id, Model model) {
-        Kpis kpi = analisisService.obtenerKPIPorId(id)
-            .orElseThrow(() -> new RuntimeException("KPI no encontrado"));
-        model.addAttribute("kpi", kpi);
-        model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
+        try {
+            Optional<Kpis> kpiOpt = analisisService.obtenerKPIPorId(id);
+            Kpis kpi = kpiOpt.orElseThrow(() -> new RuntimeException("KPI no encontrado"));
+            
+            KpisDTO kpiDTO = convertirKpisaDTO(kpi);
+            model.addAttribute("kpi", kpiDTO);
+            model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
+        } catch (Exception e) {
+            log.error("Error al editar KPI: {}", id, e);
+            model.addAttribute("error", "KPI no encontrado");
+        }
         return "AnalisisYReportes/registrarKPI";
     }
 
     @PostMapping("/kpi/actualizar")
-    public String actualizarKPI(@ModelAttribute Kpis kpi, RedirectAttributes redirectAttributes) {
+    public String actualizarKPI(@ModelAttribute KpisDTO kpiDTO, RedirectAttributes redirectAttributes) {
         try {
+            Kpis kpi = convertirDTOaKpis(kpiDTO);
             analisisService.actualizarKPI(kpi);
             redirectAttributes.addFlashAttribute("mensaje", "KPI actualizado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al actualizar KPI", e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar KPI: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
@@ -134,6 +150,7 @@ public class AnalisisController {
             redirectAttributes.addFlashAttribute("mensaje", "KPI eliminado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al eliminar KPI: {}", id, e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al eliminar KPI: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
@@ -143,17 +160,19 @@ public class AnalisisController {
     // ==================== PETICIONES ====================
     @GetMapping("/peticiones")
     public String hacerPeticiones(Model model) {
-        model.addAttribute("peticion", new Peticion());
+        model.addAttribute("peticion", new PeticionDTO());
         return "AnalisisYReportes/hacerPeticion";
     }
 
     @PostMapping("/peticiones/guardar")
-    public String guardarPeticion(@ModelAttribute Peticion peticion, RedirectAttributes redirectAttributes) {
+    public String guardarPeticion(@ModelAttribute PeticionDTO peticionDTO, RedirectAttributes redirectAttributes) {
         try {
+            Peticion peticion = convertirDTOaPeticion(peticionDTO);
             analisisService.crearPeticion(peticion);
             redirectAttributes.addFlashAttribute("mensaje", "Petición creada exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al crear petición", e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al crear petición: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
@@ -174,9 +193,14 @@ public class AnalisisController {
 
     @GetMapping("/solicitud/detalle/{id}")
     public String detallePeticion(@PathVariable String id, Model model) {
-        Peticion peticion = analisisService.obtenerPeticionPorId(id)
-            .orElseThrow(() -> new RuntimeException("Petición no encontrada"));
-        model.addAttribute("peticion", peticion);
+        try {
+            Optional<Peticion> peticionOpt = analisisService.obtenerPeticionPorId(id);
+            Peticion peticion = peticionOpt.orElseThrow(() -> new RuntimeException("Petición no encontrada"));
+            model.addAttribute("peticion", peticion);
+        } catch (Exception e) {
+            log.error("Error al obtener detalle de petición: {}", id, e);
+            model.addAttribute("error", "Petición no encontrada");
+        }
         return "AnalisisYReportes/detallePeticion";
     }
 
@@ -191,6 +215,7 @@ public class AnalisisController {
             redirectAttributes.addFlashAttribute("mensaje", "Estado actualizado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al actualizar estado de petición: {}", id, e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar estado: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
@@ -204,9 +229,41 @@ public class AnalisisController {
             redirectAttributes.addFlashAttribute("mensaje", "Petición eliminada exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
+            log.error("Error al eliminar petición: {}", id, e);
             redirectAttributes.addFlashAttribute("mensaje", "Error al eliminar petición: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
         return "redirect:/analisis/solicitud";
+    }
+
+    // ==================== MÉTODOS DE CONVERSIÓN DTO <-> ENTIDAD ====================
+
+    private Kpis convertirDTOaKpis(KpisDTO dto) {
+        Kpis kpi = new Kpis();
+        kpi.setId(dto.getId());
+        kpi.setNombre(dto.getNombre());
+        kpi.setDescripcion(dto.getDescripcion());
+        kpi.setEstado(dto.getEstado());
+        return kpi;
+    }
+
+    private KpisDTO convertirKpisaDTO(Kpis kpi) {
+        KpisDTO dto = new KpisDTO();
+        dto.setId(kpi.getId());
+        dto.setNombre(kpi.getNombre());
+        dto.setDescripcion(kpi.getDescripcion());
+        dto.setEstado(kpi.getEstado());
+        return dto;
+    }
+
+    private Peticion convertirDTOaPeticion(PeticionDTO dto) {
+        Peticion peticion = new Peticion();
+        peticion.setId(dto.getId());
+        peticion.setTitulo(dto.getTitulo());
+        peticion.setDescripcion(dto.getDescripcion());
+        peticion.setEstado(dto.getEstado());
+        peticion.setProgreso(dto.getProgreso());
+        peticion.setPrioridad(dto.getPrioridad());
+        return peticion;
     }
 }

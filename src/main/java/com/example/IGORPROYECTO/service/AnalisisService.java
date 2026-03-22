@@ -41,7 +41,7 @@ public class AnalisisService {
      * Obtener todas las peticiones
      */
     public List<Peticion> obtenerTodasPeticiones() {
-        return peticionRepository.findAllByOrderByFechaSolicitudDesc();
+        return peticionRepository.findAllByOrderByFechaCreacionDesc();
     }
 
     /**

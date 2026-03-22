@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "Peticiones")
+@Document(collection = "peticiones")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,20 +19,25 @@ public class Peticion {
     @Id
     private String id;
     private String titulo;
-    private String tipo; // "Reporte", "Análisis", "Dashboard", etc.
+    private String tipo; // "Reporte", "Dashboard", "Análisis", etc.
     private String descripcion;
+    private String clienteId; // ID del cliente que hace la petición
+    private String proyectoId; // proyecto relacionado
+    private String prioridad; // "Alta", "Media", "Baja"
+    private String estado = "Pendiente"; // "Pendiente", "En Proceso", "Completado", "Cancelado"
+    
+    private Date fechaCreacion = new Date();
+    
+    // Campos adicionales
     private String solicitante;
-
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaSolicitud;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaEstimada;
 
-    private String estado; // "Pendiente", "En Proceso", "Completado", "Cancelado"
     private Integer progreso; // 0-100
-    private String prioridad; // "Alta", "Media", "Baja"
-    private String proyecto; // Proyecto relacionado
     private String comentarios;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

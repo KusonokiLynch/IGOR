@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="es">
 <head>
@@ -15,7 +15,6 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
-            <!-- Contenedor con ancho máximo y espaciado consistente -->
             <div class="max-w-7xl mx-auto space-y-8">
 
                 <!-- Header -->
@@ -25,7 +24,7 @@
                 </section>
 
                 <!-- Mensajes -->
-                <div th:if="${mensaje}" 
+                <div th:if="${mensaje}"
                      th:class="${tipoMensaje == 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'}"
                      class="border px-6 py-4 rounded-lg relative shadow" role="alert">
                     <span class="block sm:inline font-medium" th:text="${mensaje}"></span>
@@ -42,27 +41,27 @@
                                 <span class="font-bold text-gray-800 text-lg">Filtrar por estado:</span>
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <a th:href="@{/analisis/solicitud}" 
+                                <a th:href="@{/analisis/solicitud}"
                                    th:classappend="${filtroActivo == null ? 'bg-indigo-600 text-white shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
                                    class="px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 transform">
                                     Todos
                                 </a>
-                                <a th:href="@{/analisis/solicitud(estado='Pendiente')}" 
+                                <a th:href="@{/analisis/solicitud(estado='Pendiente')}"
                                    th:classappend="${filtroActivo == 'Pendiente' ? 'bg-yellow-600 text-white shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
                                    class="px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 transform">
                                     Pendiente
                                 </a>
-                                <a th:href="@{/analisis/solicitud(estado='En Proceso')}" 
+                                <a th:href="@{/analisis/solicitud(estado='En Proceso')}"
                                    th:classappend="${filtroActivo == 'En Proceso' ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
                                    class="px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 transform">
                                     En Proceso
                                 </a>
-                                <a th:href="@{/analisis/solicitud(estado='Completado')}" 
+                                <a th:href="@{/analisis/solicitud(estado='Completado')}"
                                    th:classappend="${filtroActivo == 'Completado' ? 'bg-green-600 text-white shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
                                    class="px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 transform">
                                     Completado
                                 </a>
-                                <a th:href="@{/analisis/solicitud(estado='Cancelado')}" 
+                                <a th:href="@{/analisis/solicitud(estado='Cancelado')}"
                                    th:classappend="${filtroActivo == 'Cancelado' ? 'bg-red-600 text-white shadow-lg' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
                                    class="px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 transform">
                                     Cancelado
@@ -74,7 +73,7 @@
 
                 <!-- Lista de Peticiones -->
                 <section>
-                    
+
                     <!-- Mensaje si no hay peticiones -->
                     <div th:if="${#lists.isEmpty(peticiones)}" class="bg-white rounded-lg shadow-lg p-16 text-center">
                         <svg class="mx-auto h-24 w-24 text-gray-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +88,7 @@
                                 Aún no has creado ninguna petición
                             </span>
                         </p>
-                        <a th:href="@{/analisis/peticiones}" 
+                        <a th:href="@{/analisis/peticiones}"
                            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -107,25 +106,26 @@
                                     <div class="flex-1">
                                         <h3 class="text-2xl font-bold text-gray-800 mb-3" th:text="${peticion.titulo}"></h3>
                                         <div class="flex flex-wrap gap-2 mb-2">
-                                            <span class="px-3 py-1.5 bg-indigo-100 text-indigo-800 text-sm font-bold rounded-full" 
+                                            <span class="px-3 py-1.5 bg-indigo-100 text-indigo-800 text-sm font-bold rounded-full"
                                                   th:text="${peticion.tipo}"></span>
-                                            <span th:class="${peticion.prioridad == 'Alta' ? 'bg-red-100 text-red-800' : 
-                                                            peticion.prioridad == 'Media' ? 'bg-yellow-100 text-yellow-800' : 
+                                            <span th:class="${peticion.prioridad == 'Alta' ? 'bg-red-100 text-red-800' :
+                                                            peticion.prioridad == 'Media' ? 'bg-yellow-100 text-yellow-800' :
                                                             'bg-green-100 text-green-800'}"
-                                                  class="px-3 py-1.5 text-sm font-bold rounded-full" 
+                                                  class="px-3 py-1.5 text-sm font-bold rounded-full"
                                                   th:text="'Prioridad: ' + ${peticion.prioridad}"></span>
-                                            <span th:if="${peticion.proyecto}" 
+                                            <!-- ✅ FIX 2: usar proyectoId en lugar de proyecto -->
+                                            <span th:if="${peticion.proyectoId != null and !#strings.isEmpty(peticion.proyectoId)}"
                                                   class="px-3 py-1.5 bg-purple-100 text-purple-800 text-sm font-bold rounded-full">
-                                                📁 <span th:text="${peticion.proyecto}"></span>
+                                                📁 <span th:text="${peticion.proyectoId}"></span>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <span th:class="${peticion.estado == 'Completado' ? 'bg-green-100 text-green-800 border-green-300' : 
-                                                        peticion.estado == 'En Proceso' ? 'bg-blue-100 text-blue-800 border-blue-300' : 
-                                                        peticion.estado == 'Cancelado' ? 'bg-red-100 text-red-800 border-red-300' : 
+                                        <span th:class="${peticion.estado == 'Completado' ? 'bg-green-100 text-green-800 border-green-300' :
+                                                        peticion.estado == 'En Proceso' ? 'bg-blue-100 text-blue-800 border-blue-300' :
+                                                        peticion.estado == 'Cancelado' ? 'bg-red-100 text-red-800 border-red-300' :
                                                         'bg-yellow-100 text-yellow-800 border-yellow-300'}"
-                                              class="px-5 py-2.5 text-sm font-bold rounded-full border-2 shadow-sm whitespace-nowrap" 
+                                              class="px-5 py-2.5 text-sm font-bold rounded-full border-2 shadow-sm whitespace-nowrap"
                                               th:text="${peticion.estado}"></span>
                                     </div>
                                 </div>
@@ -141,30 +141,36 @@
                                         </svg>
                                         <span class="font-medium text-gray-700" th:text="${peticion.solicitante}"></span>
                                     </div>
+                                    <!-- ✅ FIX 1: null check en fechaSolicitud -->
                                     <div class="flex items-center bg-gray-50 p-3 rounded-lg">
                                         <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
-                                        <span class="font-medium text-gray-700" th:text="${#dates.format(peticion.fechaSolicitud, 'dd/MM/yyyy')}"></span>
+                                        <span class="font-medium text-gray-700"
+                                              th:text="${peticion.fechaSolicitud != null ? #dates.format(peticion.fechaSolicitud, 'dd/MM/yyyy') : 'Sin fecha'}"></span>
                                     </div>
-                                    <div class="flex items-center bg-gray-50 p-3 rounded-lg" th:if="${peticion.fechaEstimada}">
+                                    <div class="flex items-center bg-gray-50 p-3 rounded-lg" th:if="${peticion.fechaEstimada != null}">
                                         <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
-                                        <span class="font-medium text-gray-700">Entrega: <span th:text="${#dates.format(peticion.fechaEstimada, 'dd/MM/yyyy')}"></span></span>
+                                        <span class="font-medium text-gray-700">
+                                            Entrega: <span th:text="${#dates.format(peticion.fechaEstimada, 'dd/MM/yyyy')}"></span>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Barra de Progreso -->
+                                <!-- ✅ FIX 3: null check en progreso -->
                                 <div class="mb-5">
                                     <div class="flex justify-between items-center mb-2">
                                         <span class="text-sm font-bold text-gray-700">Progreso</span>
-                                        <span class="text-lg font-bold text-indigo-600" th:text="${peticion.progreso} + '%'"></span>
+                                        <span class="text-lg font-bold text-indigo-600"
+                                              th:text="${(peticion.progreso != null ? peticion.progreso : 0)} + '%'"></span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
-                                        <div th:style="'width: ' + ${peticion.progreso} + '%'" 
-                                             th:class="${peticion.progreso >= 100 ? 'bg-green-500' : 
-                                                       peticion.progreso >= 50 ? 'bg-blue-500' : 'bg-yellow-500'}"
+                                        <div th:style="'width: ' + ${peticion.progreso != null ? peticion.progreso : 0} + '%'"
+                                             th:class="${(peticion.progreso != null ? peticion.progreso : 0) >= 100 ? 'bg-green-500' :
+                                                       (peticion.progreso != null ? peticion.progreso : 0) >= 50 ? 'bg-blue-500' : 'bg-yellow-500'}"
                                              class="h-4 rounded-full transition-all duration-500 shadow-sm"></div>
                                     </div>
                                 </div>
@@ -173,19 +179,19 @@
                                 <div class="flex gap-3 pt-5 border-t-2 border-gray-100">
                                     <form th:action="@{/analisis/solicitud/actualizar-estado}" method="post" class="flex gap-3 flex-1 flex-wrap">
                                         <input type="hidden" name="id" th:value="${peticion.id}">
-                                        <select name="estado" 
+                                        <select name="estado"
                                                 class="flex-1 min-w-[150px] px-4 py-3 border-2 border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                                             <option value="Pendiente" th:selected="${peticion.estado == 'Pendiente'}">Pendiente</option>
                                             <option value="En Proceso" th:selected="${peticion.estado == 'En Proceso'}">En Proceso</option>
                                             <option value="Completado" th:selected="${peticion.estado == 'Completado'}">Completado</option>
                                             <option value="Cancelado" th:selected="${peticion.estado == 'Cancelado'}">Cancelado</option>
                                         </select>
-                                        <input type="number" name="progreso" 
-                                               th:value="${peticion.progreso}" 
-                                               min="0" max="100" 
-                                               placeholder="%" 
+                                        <input type="number" name="progreso"
+                                               th:value="${peticion.progreso != null ? peticion.progreso : 0}"
+                                               min="0" max="100"
+                                               placeholder="%"
                                                class="w-24 px-4 py-3 border-2 border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                                        <button 
+                                        <button
                                             sec:authorize="hasAnyRole('TRABAJADOR', 'SUPERVISOR', 'DIRECTOR')"
                                             type="submit"
                                             class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform inline-flex items-center gap-2">
@@ -195,9 +201,9 @@
                                             Actualizar
                                         </button>
                                     </form>
-                                    <a 
+                                    <a
                                         sec:authorize="hasAnyRole('TRABAJADOR', 'SUPERVISOR', 'DIRECTOR')"
-                                        th:href="@{/analisis/solicitud/eliminar/{id}(id=${peticion.id})}" 
+                                        th:href="@{/analisis/solicitud/eliminar/{id}(id=${peticion.id})}"
                                         onclick="return confirm('¿Está seguro de eliminar esta petición?')"
                                         class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform inline-flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +221,7 @@
                 <!-- Botones de acción -->
                 <section class="text-center space-y-4">
                     <div>
-                        <a th:href="@{/analisis/peticiones}" 
+                        <a th:href="@{/analisis/peticiones}"
                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform inline-flex items-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -223,8 +229,7 @@
                             Nueva Petición
                         </a>
                     </div>
-                    
-                    <a th:href="@{/analisis}" 
+                    <a th:href="@{/analisis}"
                        class="inline-flex items-center gap-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 font-semibold">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>

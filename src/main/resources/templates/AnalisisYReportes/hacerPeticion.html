@@ -20,7 +20,7 @@
             </section>
 
             <!-- Mensajes -->
-            <div th:if="${mensaje}" 
+            <div th:if="${mensaje}"
                  th:class="${tipoMensaje == 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'}"
                  class="border px-4 py-3 rounded-lg relative" role="alert">
                 <span class="block sm:inline" th:text="${mensaje}"></span>
@@ -28,7 +28,7 @@
 
             <!-- Formulario de Petición -->
             <section class="bg-white rounded-lg shadow-lg overflow-hidden">
-                
+
                 <!-- Header del formulario -->
                 <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
                     <div class="flex items-center">
@@ -45,8 +45,8 @@
                 </div>
 
                 <!-- Formulario -->
-                <form th:action="@{/analisis/peticiones/guardar}" th:object="${peticion}" method="post" class="p-8 space-y-6">
-                    
+                <form th:action="@{/analisis/peticiones/guardar}" th:object="${peticion}" method="post" class="p-8 space-y-6" id="peticionForm">
+
                     <!-- Título de la Petición -->
                     <div>
                         <label class="block mb-2 font-semibold text-gray-700">
@@ -116,12 +116,15 @@
                             Proyecto Relacionado
                         </label>
                         <div class="relative">
+                            <!-- ✅ FIX 2: Protección contra proyectos null -->
                             <select th:field="*{proyectoId}"
                                     class="w-full px-4 py-3 pl-11 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition appearance-none">
                                 <option value="">-- Seleccionar proyecto --</option>
-                                <option th:each="proyecto : ${proyectos}" 
-                                        th:value="${proyecto.id}" 
-                                        th:text="${proyecto.nombre}"></option>
+                                <option th:if="${proyectos != null}"
+                                        th:each="proyecto : ${proyectos}"
+                                        th:value="${proyecto.id}"
+                                        th:text="${proyecto.nombre}">
+                                </option>
                             </select>
                             <svg class="absolute left-3 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19h6m-6 0a2 2 0 11-4 0 2 2 0 014 0zM9 7h6m0 0a2 2 0 110-4 2 2 0 010 4z"/>
@@ -163,7 +166,9 @@
                             Fecha Estimada de Entrega
                         </label>
                         <div class="relative">
+                            <!-- ✅ FIX 1: th:value con null check para evitar string vacío -->
                             <input type="date" th:field="*{fechaEstimada}"
+                                   th:value="${peticion.fechaEstimada != null ? #dates.format(peticion.fechaEstimada, 'yyyy-MM-dd') : ''}"
                                    class="w-full px-4 py-3 pl-11 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                             <svg class="absolute left-3 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -223,7 +228,7 @@
             </section>
 
             <div class="text-center">
-                <a th:href="@{/analisis}" 
+                <a th:href="@{/analisis}"
                    class="inline-block text-gray-700 underline hover:text-gray-900 transition">
                    Volver al menú de análisis
                 </a>
@@ -234,6 +239,44 @@
 
     <!-- Footer -->
     <div th:replace="fragments/footer :: footer"></div>
+
+    <!-- ✅ FIX 3: Validación frontend antes de enviar -->
+    <script>
+        document.getElementById('peticionForm').addEventListener('submit', function(e) {
+            const campos = [
+                { name: 'titulo',      label: 'Título' },
+                { name: 'tipo',        label: 'Tipo de Solicitud' },
+                { name: 'prioridad',   label: 'Prioridad' },
+                { name: 'solicitante', label: 'Solicitante' },
+                { name: 'descripcion', label: 'Descripción' }
+            ];
+
+            const vacios = campos.filter(c => {
+                const el = document.querySelector('[name="' + c.name + '"]');
+                return !el || !el.value.trim();
+            }).map(c => c.label);
+
+            if (vacios.length > 0) {
+                e.preventDefault();
+                mostrarError('Por favor completa los siguientes campos obligatorios: ' + vacios.join(', '));
+            }
+        });
+
+        function mostrarError(msg) {
+            // Eliminar alerta previa si existe
+            const prev = document.getElementById('validacionAlert');
+            if (prev) prev.remove();
+
+            const alerta = document.createElement('div');
+            alerta.id = 'validacionAlert';
+            alerta.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4';
+            alerta.innerHTML = '<span class="font-semibold">⚠️ ' + msg + '</span>';
+
+            const form = document.getElementById('peticionForm');
+            form.parentNode.insertBefore(alerta, form);
+            window.scrollTo({ top: alerta.offsetTop - 20, behavior: 'smooth' });
+        }
+    </script>
 
 </body>
 </html>

@@ -15,4 +15,5 @@ public interface PeticionRepository extends MongoRepository<Peticion, String> {
     List<Peticion> findByTipo(String tipo);
     List<Peticion> findByProyectoId(String proyectoId);
     List<Peticion> findAllByOrderByFechaCreacionDesc();
+    long countByEstado(String estado); // ✅ AGREGAR
 }

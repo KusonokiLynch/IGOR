@@ -26,16 +26,14 @@ public class AnalisisService {
      * Crear una nueva petición
      */
     public Peticion crearPeticion(Peticion peticion) {
-        peticion.setFechaSolicitud(new Date());
-        peticion.setFechaActualizacion(new Date());
-        if (peticion.getEstado() == null) {
-            peticion.setEstado("Pendiente");
-        }
-        if (peticion.getProgreso() == null) {
-            peticion.setProgreso(0);
-        }
-        return peticionRepository.save(peticion);
-    }
+    Date ahora = new Date();
+    if (peticion.getFechaSolicitud() == null) peticion.setFechaSolicitud(ahora);
+    if (peticion.getFechaActualizacion() == null) peticion.setFechaActualizacion(ahora);
+    if (peticion.getFechaCreacion() == null) peticion.setFechaCreacion(ahora);
+    if (peticion.getEstado() == null) peticion.setEstado("Pendiente");
+    if (peticion.getProgreso() == null) peticion.setProgreso(0);
+    return peticionRepository.save(peticion);
+}
 
     /**
      * Obtener todas las peticiones

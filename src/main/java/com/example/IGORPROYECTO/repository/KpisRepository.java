@@ -23,4 +23,5 @@ public interface KpisRepository extends MongoRepository<Kpi, String> {
     
     // Ordenar por fecha de creación descendente
     List<Kpi> findAllByOrderByFechaCreacionDesc();
+    long countByEstado(String estado); // ✅ AGREGADO
 }

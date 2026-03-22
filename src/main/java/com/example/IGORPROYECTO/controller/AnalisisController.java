@@ -118,7 +118,7 @@ public class AnalisisController {
         try {
             Optional<Kpi> kpiOpt = analisisService.obtenerKPIPorId(id);
             Kpi kpi = kpiOpt.orElseThrow(() -> new RuntimeException("KPI no encontrado"));
-            
+
             KpiDTO kpiDTO = convertirKpiaDTO(kpi);
             model.addAttribute("kpi", kpiDTO);
             model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
@@ -163,16 +163,14 @@ public class AnalisisController {
     public String hacerPeticiones(Model model) {
         log.info("GET /peticiones - Cargando formulario");
         try {
-            // Crear un DTO vacío para el formulario
             model.addAttribute("peticion", new PeticionDTO());
-            
-            // Obtener lista de proyectos de la BD
+
             List<Proyecto> proyectos = proyectoRepository.findAll();
             log.info("Proyectos cargados: {}", proyectos.size());
-            
+
             model.addAttribute("proyectos", proyectos);
             return "AnalisisYReportes/hacerPeticion";
-            
+
         } catch (Exception e) {
             log.error("Error cargando formulario de peticiones", e);
             model.addAttribute("error", "Error cargando el formulario");
@@ -183,16 +181,15 @@ public class AnalisisController {
     @PostMapping("/peticiones/guardar")
     public String guardarPeticion(@ModelAttribute PeticionDTO peticionDTO, RedirectAttributes redirectAttributes) {
         log.info("========== POST /peticiones/guardar INICIADO ==========");
-        
+
         try {
-            // LOG: Datos recibidos
             log.info("STEP 1 - Datos recibidos del formulario:");
             log.info("  - Título: {}", peticionDTO.getTitulo());
             log.info("  - Tipo: {}", peticionDTO.getTipo());
             log.info("  - Prioridad: {}", peticionDTO.getPrioridad());
             log.info("  - Solicitante: {}", peticionDTO.getSolicitante());
             log.info("  - Descripción: {}", peticionDTO.getDescripcion() != null ? "✅ Presente" : "❌ NULL");
-            
+
             // Validaciones básicas
             if (peticionDTO.getTitulo() == null || peticionDTO.getTitulo().trim().isEmpty()) {
                 throw new IllegalArgumentException("El título es obligatorio");
@@ -200,39 +197,37 @@ public class AnalisisController {
             if (peticionDTO.getDescripcion() == null || peticionDTO.getDescripcion().trim().isEmpty()) {
                 throw new IllegalArgumentException("La descripción es obligatoria");
             }
-            
+
             log.info("STEP 2 - Convirtiendo DTO a Petición...");
-            // Convertir DTO a Entidad
             Peticion peticion = convertirDTOaPeticion(peticionDTO);
             log.info("  ✅ Petición creada");
             log.info("  - ID: {}", peticion.getId());
             log.info("  - Estado: {}", peticion.getEstado());
             log.info("  - Progreso: {}", peticion.getProgreso());
-            
+
             log.info("STEP 3 - Guardando en la BD...");
-            // Guardar en la BD
             analisisService.crearPeticion(peticion);
             log.info("  ✅ Petición guardada exitosamente");
             log.info("  - ID generado: {}", peticion.getId());
-            
+
             redirectAttributes.addFlashAttribute("mensaje", "✅ Petición creada exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
-            
+
             log.info("========== GUARDADO COMPLETADO ==========");
             return "redirect:/analisis/solicitud";
-            
+
         } catch (IllegalArgumentException e) {
             log.warn("⚠️ Error de validación: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("mensaje", "Error: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
             return "redirect:/analisis/peticiones";
-            
+
         } catch (Exception e) {
             log.error("❌ Error al guardar petición", e);
             log.error("Tipo de error: {}", e.getClass().getName());
             log.error("Mensaje: {}", e.getMessage());
             e.printStackTrace();
-            
+
             redirectAttributes.addFlashAttribute("mensaje", "Error al crear petición: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
             return "redirect:/analisis/peticiones";
@@ -324,15 +319,9 @@ public class AnalisisController {
         return dto;
     }
 
-    /**
-     * ✅ CORREGIDO: Conversión correcta de DTO a Petición
-     * - Inicializa estado como "Pendiente" si es null
-     * - Inicializa progreso como 0 si es null
-     * - Inicializa fechaCreacion y fechaSolicitud
-     */
     private Peticion convertirDTOaPeticion(PeticionDTO dto) {
         log.info("🔄 Iniciando conversión DTO → Petición");
-        
+
         Peticion peticion = new Peticion();
         peticion.setId(dto.getId());
         peticion.setTitulo(dto.getTitulo());
@@ -342,26 +331,27 @@ public class AnalisisController {
         peticion.setProyectoId(dto.getProyectoId());
         peticion.setSolicitante(dto.getSolicitante());
         peticion.setPrioridad(dto.getPrioridad());
-        
-        // ✅ CORREGIDO: Inicializar estado correctamente
+        peticion.setComentarios(dto.getComentarios());
+
+        // Inicializar estado y progreso con valores por defecto si vienen null
         peticion.setEstado(dto.getEstado() != null ? dto.getEstado() : "Pendiente");
-        
-        // ✅ CORREGIDO: Inicializar progreso correctamente
         peticion.setProgreso(dto.getProgreso() != null ? dto.getProgreso() : 0);
-        
-        // ✅ CORREGIDO: Inicializar fechas
+
+        // Inicializar fechas con null checks
         Date ahora = new Date();
         peticion.setFechaCreacion(dto.getFechaCreacion() != null ? dto.getFechaCreacion() : ahora);
         peticion.setFechaSolicitud(dto.getFechaSolicitud() != null ? dto.getFechaSolicitud() : ahora);
         peticion.setFechaActualizacion(dto.getFechaActualizacion() != null ? dto.getFechaActualizacion() : ahora);
-        
-        peticion.setFechaEstimada(dto.getFechaEstimada());
-        peticion.setComentarios(dto.getComentarios());
-        
+
+        // ✅ FIX: null check en fechaEstimada — campo opcional del formulario
+        if (dto.getFechaEstimada() != null) {
+            peticion.setFechaEstimada(dto.getFechaEstimada());
+        }
+
         log.info("✅ Conversión completada");
         log.info("  - Estado final: {}", peticion.getEstado());
         log.info("  - Progreso final: {}", peticion.getProgreso());
-        
+
         return peticion;
     }
 

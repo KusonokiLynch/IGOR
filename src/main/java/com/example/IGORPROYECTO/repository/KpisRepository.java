@@ -5,22 +5,22 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.IGORPROYECTO.model.Kpis;
+import com.example.IGORPROYECTO.model.Kpi;
 
 @Repository
-public interface KpisRepository extends MongoRepository<Kpis, String> {
+public interface KpisRepository extends MongoRepository<Kpi, String> {
     // Buscar por nombre de proyecto
-    List<Kpis> findByNombreProyecto(String nombreProyecto);
+    List<Kpi> findByNombreProyecto(String nombreProyecto);
     
     // Buscar por tipo
-    List<Kpis> findByTipo(String tipo);
+    List<Kpi> findByTipo(String tipo);
     
     // Buscar por estado
-    List<Kpis> findByEstado(String estado);
+    List<Kpi> findByEstado(String estado);
     
     // Buscar por propietario
-    List<Kpis> findByPropietario(String propietario);
+    List<Kpi> findByPropietario(String propietario);
     
     // Ordenar por fecha de creación descendente
-    List<Kpis> findAllByOrderByFechaCreacionDesc();
+    List<Kpi> findAllByOrderByFechaCreacionDesc();
 }

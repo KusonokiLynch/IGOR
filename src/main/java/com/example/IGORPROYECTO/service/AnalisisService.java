@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.IGORPROYECTO.model.Kpis;
+import com.example.IGORPROYECTO.model.Kpi;
 import com.example.IGORPROYECTO.model.Peticion;
 import com.example.IGORPROYECTO.repository.KpisRepository;
 import com.example.IGORPROYECTO.repository.PeticionRepository;
@@ -109,7 +109,7 @@ public class AnalisisService {
     /**
      * Crear un nuevo KPI
      */
-    public Kpis crearKPI(Kpis kpi) {
+    public Kpi crearKPI(Kpi kpi) {
         kpi.setFechaCreacion(new Date());
         if (kpi.getEstado() == null) {
             kpi.setEstado("Activo");
@@ -120,42 +120,42 @@ public class AnalisisService {
     /**
      * Obtener todos los KPIs
      */
-    public List<Kpis> obtenerTodosKPIs() {
+    public List<Kpi> obtenerTodosKPIs() {
         return kpisRepository.findAllByOrderByFechaCreacionDesc();
     }
 
     /**
      * Obtener KPI por ID
      */
-    public Optional<Kpis> obtenerKPIPorId(String id) {
+    public Optional<Kpi> obtenerKPIPorId(String id) {
         return kpisRepository.findById(id);
     }
 
     /**
      * Obtener KPIs por proyecto
      */
-    public List<Kpis> obtenerKPIsPorProyecto(String nombreProyecto) {
+    public List<Kpi> obtenerKPIsPorProyecto(String nombreProyecto) {
         return kpisRepository.findByNombreProyecto(nombreProyecto);
     }
 
     /**
      * Obtener KPIs por tipo
      */
-    public List<Kpis> obtenerKPIsPorTipo(String tipo) {
+    public List<Kpi> obtenerKPIsPorTipo(String tipo) {
         return kpisRepository.findByTipo(tipo);
     }
 
     /**
      * Obtener KPIs por propietario
      */
-    public List<Kpis> obtenerKPIsPorPropietario(String propietario) {
+    public List<Kpi> obtenerKPIsPorPropietario(String propietario) {
         return kpisRepository.findByPropietario(propietario);
     }
 
     /**
      * Actualizar KPI
      */
-    public Kpis actualizarKPI(Kpis kpi) {
+    public Kpi actualizarKPI(Kpi kpi) {
         return kpisRepository.save(kpi);
     }
 

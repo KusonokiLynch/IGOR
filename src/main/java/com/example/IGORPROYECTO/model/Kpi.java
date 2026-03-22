@@ -9,12 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "Kpis")
+@Document(collection = "kpis")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class Kpis {
+public class Kpi {
 
     @Id
     private String id;
@@ -22,7 +21,7 @@ public class Kpis {
     private String nombreProyecto;
     private String tipo;
     private String descripcion;
-    private Date FechaCreacion;
+    private Date fechaCreacion = new Date(); // ✅ CORREGIDO: minúscula + inicialización automática
     private String estado;
     private String propietario;
 }

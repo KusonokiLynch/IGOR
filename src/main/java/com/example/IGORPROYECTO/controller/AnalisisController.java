@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.IGORPROYECTO.model.Documentacion;
-import com.example.IGORPROYECTO.model.Kpis;
+import com.example.IGORPROYECTO.model.Kpi;
 import com.example.IGORPROYECTO.model.Peticion;
 import com.example.IGORPROYECTO.model.Proyecto;
 
-import com.example.IGORPROYECTO.dto.KpisDTO;
+import com.example.IGORPROYECTO.dto.KpiDTO;
 import com.example.IGORPROYECTO.dto.PeticionDTO;
 
 import com.example.IGORPROYECTO.repository.DocumentacionRepository;
@@ -92,15 +92,15 @@ public class AnalisisController {
     // ==================== KPIs ====================
     @GetMapping("/kpi")
     public String registrarKPI(Model model) {
-        model.addAttribute("kpi", new KpisDTO());
+        model.addAttribute("kpi", new KpiDTO());
         model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
         return "AnalisisYReportes/registrarKPI";
     }
 
     @PostMapping("/kpi/guardar")
-    public String guardarKPI(@ModelAttribute KpisDTO kpiDTO, RedirectAttributes redirectAttributes) {
+    public String guardarKPI(@ModelAttribute KpiDTO kpiDTO, RedirectAttributes redirectAttributes) {
         try {
-            Kpis kpi = convertirDTOaKpis(kpiDTO);
+            Kpi kpi = convertirDTOaKpi(kpiDTO);
             analisisService.crearKPI(kpi);
             redirectAttributes.addFlashAttribute("mensaje", "KPI registrado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
@@ -115,10 +115,10 @@ public class AnalisisController {
     @GetMapping("/kpi/editar/{id}")
     public String editarKPI(@PathVariable String id, Model model) {
         try {
-            Optional<Kpis> kpiOpt = analisisService.obtenerKPIPorId(id);
-            Kpis kpi = kpiOpt.orElseThrow(() -> new RuntimeException("KPI no encontrado"));
+            Optional<Kpi> kpiOpt = analisisService.obtenerKPIPorId(id);
+            Kpi kpi = kpiOpt.orElseThrow(() -> new RuntimeException("KPI no encontrado"));
             
-            KpisDTO kpiDTO = convertirKpisaDTO(kpi);
+            KpiDTO kpiDTO = convertirKpiaDTO(kpi);
             model.addAttribute("kpi", kpiDTO);
             model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
         } catch (Exception e) {
@@ -129,9 +129,9 @@ public class AnalisisController {
     }
 
     @PostMapping("/kpi/actualizar")
-    public String actualizarKPI(@ModelAttribute KpisDTO kpiDTO, RedirectAttributes redirectAttributes) {
+    public String actualizarKPI(@ModelAttribute KpiDTO kpiDTO, RedirectAttributes redirectAttributes) {
         try {
-            Kpis kpi = convertirDTOaKpis(kpiDTO);
+            Kpi kpi = convertirDTOaKpi(kpiDTO);
             analisisService.actualizarKPI(kpi);
             redirectAttributes.addFlashAttribute("mensaje", "KPI actualizado exitosamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
@@ -238,32 +238,42 @@ public class AnalisisController {
 
     // ==================== MÉTODOS DE CONVERSIÓN DTO <-> ENTIDAD ====================
 
-    private Kpis convertirDTOaKpis(KpisDTO dto) {
-        Kpis kpi = new Kpis();
-        kpi.setId(dto.getId());
-        kpi.setNombre(dto.getNombre());
-        kpi.setDescripcion(dto.getDescripcion());
-        kpi.setEstado(dto.getEstado());
-        return kpi;
-    }
+  private Kpi convertirDTOaKpi(KpiDTO dto) {
+    Kpi kpi = new Kpi();
+    kpi.setId(dto.getId());
+    kpi.setNombre(dto.getNombre());
+    kpi.setNombreProyecto(dto.getNombreProyecto());
+    kpi.setTipo(dto.getTipo());
+    kpi.setDescripcion(dto.getDescripcion());
+    kpi.setFechaCreacion(dto.getFechaCreacion());
+    kpi.setEstado(dto.getEstado());
+    kpi.setPropietario(dto.getPropietario());
+    return kpi;
+}
 
-    private KpisDTO convertirKpisaDTO(Kpis kpi) {
-        KpisDTO dto = new KpisDTO();
-        dto.setId(kpi.getId());
-        dto.setNombre(kpi.getNombre());
-        dto.setDescripcion(kpi.getDescripcion());
-        dto.setEstado(kpi.getEstado());
-        return dto;
-    }
+private KpiDTO convertirKpiaDTO(Kpi kpi) {
+    KpiDTO dto = new KpiDTO();
+    dto.setId(kpi.getId());
+    dto.setNombre(kpi.getNombre());
+    dto.setNombreProyecto(kpi.getNombreProyecto());
+    dto.setTipo(kpi.getTipo());
+    dto.setDescripcion(kpi.getDescripcion());
+    dto.setFechaCreacion(kpi.getFechaCreacion());
+    dto.setEstado(kpi.getEstado());
+    dto.setPropietario(kpi.getPropietario());
+    return dto;
+}
 
-    private Peticion convertirDTOaPeticion(PeticionDTO dto) {
-        Peticion peticion = new Peticion();
-        peticion.setId(dto.getId());
-        peticion.setTitulo(dto.getTitulo());
-        peticion.setDescripcion(dto.getDescripcion());
-        peticion.setEstado(dto.getEstado());
-        peticion.setProgreso(dto.getProgreso());
-        peticion.setPrioridad(dto.getPrioridad());
-        return peticion;
-    }
+private Peticion convertirDTOaPeticion(PeticionDTO dto) {
+    Peticion peticion = new Peticion();
+    peticion.setId(dto.getId());
+    peticion.setTitulo(dto.getTitulo());
+    peticion.setDescripcion(dto.getDescripcion());
+    peticion.setEstado(dto.getEstado());
+    peticion.setProgreso(dto.getProgreso());
+    peticion.setPrioridad(dto.getPrioridad());
+    return peticion;
+    
+}
+
 }

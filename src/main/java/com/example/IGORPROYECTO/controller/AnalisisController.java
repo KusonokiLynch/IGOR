@@ -158,9 +158,17 @@ public class AnalisisController {
     }
 
     // ==================== PETICIONES ====================
+    // ✅ CORREGIDO: Ahora pasa la lista de proyectos
     @GetMapping("/peticiones")
     public String hacerPeticiones(Model model) {
         model.addAttribute("peticion", new PeticionDTO());
+        
+        // ✅ AGREGADO: Obtener lista de proyectos de la BD
+        List<Proyecto> proyectos = proyectoRepository.findAll();
+        model.addAttribute("proyectos", proyectos);
+        
+        log.info("Cargando formulario de peticiones con {} proyectos", proyectos.size());
+        
         return "AnalisisYReportes/hacerPeticion";
     }
 
@@ -268,10 +276,15 @@ private Peticion convertirDTOaPeticion(PeticionDTO dto) {
     Peticion peticion = new Peticion();
     peticion.setId(dto.getId());
     peticion.setTitulo(dto.getTitulo());
+    peticion.setTipo(dto.getTipo());  // ✅ AGREGADO
     peticion.setDescripcion(dto.getDescripcion());
+    peticion.setProyectoId(dto.getProyectoId());  // ✅ AGREGADO
+    peticion.setSolicitante(dto.getSolicitante());  // ✅ AGREGADO
+    peticion.setPrioridad(dto.getPrioridad());
     peticion.setEstado(dto.getEstado());
     peticion.setProgreso(dto.getProgreso());
-    peticion.setPrioridad(dto.getPrioridad());
+    peticion.setFechaEstimada(dto.getFechaEstimada());  // ✅ AGREGADO
+    peticion.setComentarios(dto.getComentarios());  // ✅ AGREGADO
     return peticion;
     
 }

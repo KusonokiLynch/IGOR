@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.IGORPROYECTO.model.Proyecto;
 import com.example.IGORPROYECTO.dto.ProyectoDTO;
@@ -36,17 +37,62 @@ public class ProyectoController {
         return "Proyectos/nuevo";
     }
 
-    // ✅ FIX: Recibir DTO en lugar de entidad JPA
     @PostMapping("/nuevo")
-    public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO) {
+    public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
+                                   RedirectAttributes redirectAttributes) {
+        log.info("========== POST /proyectos/nuevo INICIADO ==========");
+        
         try {
+            log.info("STEP 1 - Datos recibidos del formulario:");
+            log.info("  - Nombre: {}", proyectoDTO.getNombre());
+            log.info("  - Descripción: {}", proyectoDTO.getDescripcion() != null ? "✅ Presente" : "❌ NULL");
+            log.info("  - Estado: {}", proyectoDTO.getEstado());
+            log.info("  - Responsable: {}", proyectoDTO.getResponsable());
+            log.info("  - Cliente: {}", proyectoDTO.getCliente());
+            
+            // Validaciones básicas
+            if (proyectoDTO.getNombre() == null || proyectoDTO.getNombre().trim().isEmpty()) {
+                throw new IllegalArgumentException("El nombre del proyecto es obligatorio");
+            }
+            if (proyectoDTO.getResponsable() == null || proyectoDTO.getResponsable().trim().isEmpty()) {
+                throw new IllegalArgumentException("El responsable es obligatorio");
+            }
+            if (proyectoDTO.getCliente() == null || proyectoDTO.getCliente().trim().isEmpty()) {
+                throw new IllegalArgumentException("El cliente es obligatorio");
+            }
+            
+            log.info("STEP 2 - Convirtiendo DTO a Proyecto...");
             Proyecto proyecto = convertirDTOaProyecto(proyectoDTO);
+            log.info("  ✅ Proyecto creado");
+            log.info("  - Nombre: {}", proyecto.getNombre());
+            
+            log.info("STEP 3 - Guardando en la BD...");
             proyectoService.nuevo(proyecto);
-            log.info("Proyecto creado exitosamente: {}", proyecto.getNombre());
+            log.info("  ✅ Proyecto guardado exitosamente");
+            log.info("  - ID generado: {}", proyecto.getId());
+            
+            redirectAttributes.addFlashAttribute("mensaje", "✅ Proyecto creado exitosamente");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+            
+            log.info("========== GUARDADO COMPLETADO ==========");
+            return "redirect:/proyectos";
+            
+        } catch (IllegalArgumentException e) {
+            log.warn("⚠️ Error de validación: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("mensaje", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+            return "redirect:/proyectos/nuevo";
+            
         } catch (Exception e) {
-            log.error("Error al crear proyecto", e);
+            log.error("❌ Error al guardar proyecto", e);
+            log.error("Tipo de error: {}", e.getClass().getName());
+            log.error("Mensaje: {}", e.getMessage());
+            e.printStackTrace();
+            
+            redirectAttributes.addFlashAttribute("mensaje", "Error al crear proyecto: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+            return "redirect:/proyectos/nuevo";
         }
-        return "redirect:/proyectos";
     }
 
     @GetMapping
@@ -111,21 +157,26 @@ public class ProyectoController {
         return "Proyectos/editar";
     }
 
-    // ✅ FIX: Recibir DTO en lugar de entidad JPA
     @PostMapping("/editar/{id}")
-    public String guardarCambios(@PathVariable String id, @ModelAttribute ProyectoDTO proyectoDTO) {
+    public String guardarCambios(@PathVariable String id, @ModelAttribute ProyectoDTO proyectoDTO,
+                                 RedirectAttributes redirectAttributes) {
         try {
             Proyecto proyecto = convertirDTOaProyecto(proyectoDTO);
             proyectoService.actualizar(id, proyecto);
             log.info("Proyecto actualizado exitosamente: {}", id);
+            redirectAttributes.addFlashAttribute("mensaje", "✅ Proyecto actualizado exitosamente");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
             log.error("Error al actualizar proyecto: {}", id, e);
+            redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
         return "redirect:/proyectos/consultar";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarProyecto(@PathVariable String id, Authentication auth) {
+    public String eliminarProyecto(@PathVariable String id, Authentication auth,
+                                   RedirectAttributes redirectAttributes) {
         try {
             String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
             
@@ -135,8 +186,12 @@ public class ProyectoController {
             
             proyectoService.eliminar(id);
             log.info("Proyecto eliminado exitosamente: {}", id);
+            redirectAttributes.addFlashAttribute("mensaje", "✅ Proyecto eliminado exitosamente");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (Exception e) {
             log.error("Error al eliminar proyecto: {}", id, e);
+            redirectAttributes.addFlashAttribute("mensaje", "Error al eliminar: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
         
         return "redirect:/proyectos/consultar";

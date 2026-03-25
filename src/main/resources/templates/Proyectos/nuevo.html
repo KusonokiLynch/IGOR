@@ -74,12 +74,23 @@
                         </label>
                         <select th:field="*{estado}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            <option value="">-- Seleccionar estado --</option>
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
                             <option value="En Planificación">En Planificación</option>
                             <option value="En Ejecución">En Ejecución</option>
                             <option value="Finalizado">Finalizado</option>
                         </select>
+                    </div>
+
+                    <!-- Programa -->
+                    <div>
+                        <label class="block mb-2 font-semibold text-gray-700">
+                            Programa
+                        </label>
+                        <input type="text" th:field="*{programa}"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                               placeholder="Programa o iniciativa relacionada">
                     </div>
 
                     <!-- Fechas -->
@@ -140,14 +151,14 @@
                         </div>
                     </div>
 
-                    <!-- Programa (eliminado serial, agregado programa que faltaba) -->
+                    <!-- Serial -->
                     <div>
                         <label class="block mb-2 font-semibold text-gray-700">
-                            Programa
+                            Serial / Código
                         </label>
-                        <input type="text" th:field="*{programa}"
+                        <input type="text" th:field="*{serial}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                               placeholder="Programa o iniciativa relacionada">
+                               placeholder="Serial o código de identificación del proyecto">
                     </div>
 
                     <!-- Botones -->

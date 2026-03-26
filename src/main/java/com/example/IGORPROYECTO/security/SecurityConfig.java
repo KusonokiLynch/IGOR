@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/proyectos/editar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/eliminar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/actualizar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
-                .requestMatchers("/proyectos/**").authenticated()
+                .requestMatchers("/proyectos/**").permitAll()
 
                 .requestMatchers("/recursos/recursoNuevo").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/guardar").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
@@ -82,7 +82,7 @@ public class SecurityConfig {
 
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/home", true)
+                .defaultSuccessUrl("/home", false)
                 .permitAll()
             )
 
@@ -92,8 +92,7 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            // ❌ ELIMINADO: esto causaba tu logout
-            // .sessionManagement(...)
+          
 
             .exceptionHandling(exception -> exception
                 .accessDeniedPage("/test-403")

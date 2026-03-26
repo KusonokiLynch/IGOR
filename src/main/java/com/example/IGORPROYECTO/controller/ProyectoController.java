@@ -37,63 +37,31 @@ public class ProyectoController {
         return "Proyectos/nuevo";
     }
 
-    @PostMapping("/nuevo")
-    public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
-                                   RedirectAttributes redirectAttributes) {
-        log.info("========== POST /proyectos/nuevo INICIADO ==========");
-        
-        try {
-            log.info("STEP 1 - Datos recibidos del formulario:");
-            log.info("  - Nombre: {}", proyectoDTO.getNombre());
-            log.info("  - Descripción: {}", proyectoDTO.getDescripcion() != null ? "✅ Presente" : "❌ NULL");
-            log.info("  - Estado: {}", proyectoDTO.getEstado());
-            log.info("  - Responsable: {}", proyectoDTO.getResponsable());
-            log.info("  - Cliente: {}", proyectoDTO.getCliente());
-            
-            // Validaciones básicas
-            if (proyectoDTO.getNombre() == null || proyectoDTO.getNombre().trim().isEmpty()) {
-                throw new IllegalArgumentException("El nombre del proyecto es obligatorio");
-            }
-            if (proyectoDTO.getResponsable() == null || proyectoDTO.getResponsable().trim().isEmpty()) {
-                throw new IllegalArgumentException("El responsable es obligatorio");
-            }
-            if (proyectoDTO.getCliente() == null || proyectoDTO.getCliente().trim().isEmpty()) {
-                throw new IllegalArgumentException("El cliente es obligatorio");
-            }
-            
-            log.info("STEP 2 - Convirtiendo DTO a Proyecto...");
-            Proyecto proyecto = convertirDTOaProyecto(proyectoDTO);
-            log.info("  ✅ Proyecto creado");
-            log.info("  - Nombre: {}", proyecto.getNombre());
-            
-            log.info("STEP 3 - Guardando en la BD...");
-            proyectoService.nuevo(proyecto);
-            log.info("  ✅ Proyecto guardado exitosamente");
-            log.info("  - ID generado: {}", proyecto.getId());
-            
-            redirectAttributes.addFlashAttribute("mensaje", "✅ Proyecto creado exitosamente");
-            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
-            
-            log.info("========== GUARDADO COMPLETADO ==========");
-            return "redirect:/proyectos";
-            
-        } catch (IllegalArgumentException e) {
-            log.warn("⚠️ Error de validación: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("mensaje", "Error: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
-            return "redirect:/proyectos/nuevo";
-            
-        } catch (Exception e) {
-            log.error("❌ Error al guardar proyecto", e);
-            log.error("Tipo de error: {}", e.getClass().getName());
-            log.error("Mensaje: {}", e.getMessage());
-            e.printStackTrace();
-            
-            redirectAttributes.addFlashAttribute("mensaje", "Error al crear proyecto: " + e.getMessage());
+   @PostMapping("/nuevo")
+public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
+                              RedirectAttributes redirectAttributes) {
+    try {
+        if (proyectoDTO.getNombre() == null || proyectoDTO.getNombre().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensaje", "❌ El nombre es obligatorio");
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
             return "redirect:/proyectos/nuevo";
         }
+        
+        Proyecto proyecto = convertirDTOaProyecto(proyectoDTO);
+        proyectoService.nuevo(proyecto);
+        log.info("✅ Proyecto creado: {}", proyecto.getNombre());
+        
+        redirectAttributes.addFlashAttribute("mensaje", "✅ Proyecto creado exitosamente");
+        redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+        return "redirect:/proyectos";
+        
+    } catch (Exception e) {
+        log.error("❌ Error al crear proyecto", e);
+        redirectAttributes.addFlashAttribute("mensaje", "❌ Error: " + e.getMessage());
+        redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+        return "redirect:/proyectos/nuevo";
     }
+}
 
     @GetMapping
     public String menuProyectos(Model model) {

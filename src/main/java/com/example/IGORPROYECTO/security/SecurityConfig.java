@@ -59,11 +59,14 @@ public class SecurityConfig {
                 .requestMatchers("/analisis/peticiones/**").hasAnyRole("DIRECTOR", "CLIENTE", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/analisis/**").authenticated()
 
-                .requestMatchers("/proyectos/nuevo", "/proyectos/nuevo/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
+                .requestMatchers("/proyectos/consultar").authenticated()
+                .requestMatchers("/proyectos").authenticated()
+
+                .requestMatchers("/proyectos/nuevo").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/editar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/eliminar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
-                .requestMatchers("/proyectos/actualizar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
-                .requestMatchers("/proyectos/**").permitAll()
+
+                .requestMatchers("/proyectos/**").authenticated()
 
                 .requestMatchers("/recursos/recursoNuevo").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/guardar").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")

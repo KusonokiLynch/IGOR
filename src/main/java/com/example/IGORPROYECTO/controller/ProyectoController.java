@@ -74,44 +74,46 @@ public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
     }
 
     @GetMapping("/consultar")
-    public String consultarProyectos(Model model, Authentication auth) {
-        try {
-            List<Proyecto> proyectos = proyectoService.consultarTodos();
-            
-            String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
-            
-            long totalProyectos = proyectos.size();
-            long activos = proyectos.stream()
-                .filter(p -> "Activo".equalsIgnoreCase(p.getEstado()))
-                .count();
-            long enEjecucion = proyectos.stream()
-                .filter(p -> "En Ejecución".equalsIgnoreCase(p.getEstado()))
-                .count();
-            long finalizados = proyectos.stream()
-                .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
-                .count();
-            
-            Map<String, Long> estadisticas = new HashMap<>();
-            estadisticas.put("totalProyectos", totalProyectos);
-            estadisticas.put("activos", activos);
-            estadisticas.put("enEjecucion", enEjecucion);
-            estadisticas.put("finalizados", finalizados);
-            
-            model.addAttribute("proyectos", proyectos);
-            model.addAttribute("estadisticas", estadisticas);
-            model.addAttribute("rol", rol);
-            model.addAttribute("totalProyectos", totalProyectos);
-            model.addAttribute("activos", activos);
-            model.addAttribute("enEjecucion", enEjecucion);
-            model.addAttribute("finalizados", finalizados);
-            
-            log.info("Consulta de proyectos realizada. Total: {}", totalProyectos);
-        } catch (Exception e) {
-            log.error("Error al consultar proyectos", e);
-        }
-        
-        return "Proyectos/consultar";
-    }
+public String consultarProyectos(Model model, Authentication auth) {
+
+    List<Proyecto> proyectos = proyectoService.consultarTodos();
+
+    // DEBUG (puedes quitar luego)
+    System.out.println("TOTAL PROYECTOS: " + proyectos.size());
+    proyectos.forEach(p -> System.out.println("Estado: " + p.getEstado()));
+
+    String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+
+    long totalProyectos = proyectos.size();
+
+    long activos = proyectos.stream()
+            .filter(p -> "Activo".equalsIgnoreCase(p.getEstado()))
+            .count();
+
+    long enEjecucion = proyectos.stream()
+            .filter(p -> "En Ejecución".equalsIgnoreCase(p.getEstado()))
+            .count();
+
+    long enPlanificacion = proyectos.stream()
+            .filter(p -> "En Planificación".equalsIgnoreCase(p.getEstado()))
+            .count();
+
+    long finalizados = proyectos.stream()
+            .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
+            .count();
+
+    model.addAttribute("proyectos", proyectos);
+    model.addAttribute("rol", rol);
+
+    // 👇 SOLO variables directas (sin Map)
+    model.addAttribute("totalProyectos", totalProyectos);
+    model.addAttribute("activos", activos);
+    model.addAttribute("enEjecucion", enEjecucion);
+    model.addAttribute("enPlanificacion", enPlanificacion);
+    model.addAttribute("finalizados", finalizados);
+
+    return "Proyectos/consultar";
+}
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicion(@PathVariable String id, Model model) {

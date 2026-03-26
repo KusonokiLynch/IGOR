@@ -31,68 +31,38 @@
 
             <!-- Estadísticas rápidas -->
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 max-w-6xl mx-auto">
-                
-                <!-- Total Proyectos -->
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-6 border-t-4 border-indigo-500 hover:scale-105 transform">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-semibold">Total Proyectos</p>
-                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.totalProyectos ?: 0}">0</p>
-                        </div>
-                        <div class="bg-indigo-100 rounded-full p-3">
-                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+    
+    <!-- Total -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-500 text-sm font-semibold">Total Proyectos</p>
+        <p class="text-3xl font-bold text-gray-800" th:text="${totalProyectos}">0</p>
+    </div>
 
-                <!-- Activos -->
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-6 border-t-4 border-green-500 hover:scale-105 transform">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-semibold">Activos</p>
-                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.activos ?: 0}">0</p>
-                        </div>
-                        <div class="bg-green-100 rounded-full p-3">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+    <!-- Activos -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-500 text-sm font-semibold">Activos</p>
+        <p class="text-3xl font-bold text-gray-800" th:text="${activos}">0</p>
+    </div>
 
-                <!-- En Ejecución -->
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-6 border-t-4 border-yellow-500 hover:scale-105 transform">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-semibold">En Planificacion</p>
-                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.enEjecucion ?: 0}">0</p>
-                        </div>
-                        <div class="bg-yellow-100 rounded-full p-3">
-                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+    <!-- En Ejecución -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-500 text-sm font-semibold">En Ejecución</p>
+        <p class="text-3xl font-bold text-gray-800" th:text="${enEjecucion}">0</p>
+    </div>
 
-                <!-- Finalizados -->
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-6 border-t-4 border-blue-500 hover:scale-105 transform">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm font-semibold">Finalizados</p>
-                            <p class="text-3xl font-bold text-gray-800" th:text="${estadisticas?.finalizados ?: 0}">0</p>
-                        </div>
-                        <div class="bg-blue-100 rounded-full p-3">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <!-- En Planificación -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-500 text-sm font-semibold">En Planificación</p>
+        <p class="text-3xl font-bold text-gray-800" th:text="${enPlanificacion}">0</p>
+    </div>
 
+    <!-- Finalizados -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-500 text-sm font-semibold">Finalizados</p>
+        <p class="text-3xl font-bold text-gray-800" th:text="${finalizados}">0</p>
+    </div>
+
+</section>
             <!-- Barra de búsqueda y acciones -->
             <section class="max-w-6xl mx-auto mb-6">
                 <div class="bg-white rounded-lg shadow-lg p-6">

@@ -14,17 +14,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Proyecto {
 
     @Id
-    private String id;
+     private String id;
+
     private String nombre;
     private String descripcion;
     private String estado;
     private String programa;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaInicio;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String fechaFinal;
+    private Date fechaFinal; // ✅ CORREGIDO
+
     private String responsable;
     private String cliente;
     private String serial;
+
     private Date fechaCreacion;
 }

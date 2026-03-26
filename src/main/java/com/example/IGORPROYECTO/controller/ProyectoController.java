@@ -166,23 +166,26 @@ public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
     }
 
     // ==================== MÉTODOS DE CONVERSIÓN DTO <-> ENTIDAD ====================
+private Proyecto convertirDTOaProyecto(ProyectoDTO dto) {
+    Proyecto proyecto = new Proyecto();
 
-    private Proyecto convertirDTOaProyecto(ProyectoDTO dto) {
-        Proyecto proyecto = new Proyecto();
-        proyecto.setId(dto.getId());
-        proyecto.setNombre(dto.getNombre());
-        proyecto.setDescripcion(dto.getDescripcion());
-        proyecto.setEstado(dto.getEstado());
-        proyecto.setPrograma(dto.getPrograma());
-        proyecto.setFechaInicio(dto.getFechaInicio());
-        proyecto.setFechaFinal(dto.getFechaFinal());
-        proyecto.setResponsable(dto.getResponsable());
-        proyecto.setCliente(dto.getCliente());
-        proyecto.setSerial(dto.getSerial());
-        proyecto.setFechaCreacion(dto.getFechaCreacion());
-        return proyecto;
+    if (dto.getId() != null && !dto.getId().isEmpty()) {
+        proyecto.setId(dto.getId()); // ✅ evita conflictos en creación
     }
 
+    proyecto.setNombre(dto.getNombre());
+    proyecto.setDescripcion(dto.getDescripcion());
+    proyecto.setEstado(dto.getEstado());
+    proyecto.setPrograma(dto.getPrograma());
+    proyecto.setFechaInicio(dto.getFechaInicio());
+    proyecto.setFechaFinal(dto.getFechaFinal()); // ✅ ahora es Date
+    proyecto.setResponsable(dto.getResponsable());
+    proyecto.setCliente(dto.getCliente());
+    proyecto.setSerial(dto.getSerial());
+    proyecto.setFechaCreacion(dto.getFechaCreacion());
+
+    return proyecto;
+}
     private ProyectoDTO convertirProyectoaDTO(Proyecto proyecto) {
         ProyectoDTO dto = new ProyectoDTO();
         dto.setId(proyecto.getId());

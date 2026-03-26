@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.example.IGORPROYECTO.service.UserDetailsServiceImpl;
 
@@ -41,73 +40,61 @@ public class SecurityConfig {
     }
 
     @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // ⚠️ Se mantiene desactivado por ahora para evitar conflictos
             .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
-                // Públicas
                 .requestMatchers("/", "/registro", "/guardar", "/css/**", "/js/**", "/login").permitAll()
-                
-                // Gmail API - permitir callback público
                 .requestMatchers("/gmail/oauth2callback").permitAll()
-                
-                // Roles específicos por módulo
+
                 .requestMatchers("/administrador/**").hasRole("DIRECTOR")
                 .requestMatchers("/cliente/**").hasRole("CLIENTE") 
                 .requestMatchers("/trabajador/**").hasRole("TRABAJADOR")
                 .requestMatchers("/supervisor/**").hasRole("SUPERVISOR")
 
-                // Análisis y Reportes
                 .requestMatchers("/analisis/kpi/**").hasRole("DIRECTOR")
                 .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR","DIRECTOR","CLIENTE")
                 .requestMatchers("/analisis/peticiones/**").hasAnyRole("DIRECTOR", "CLIENTE", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/analisis/**").authenticated()
 
-                // Proyectos - CAMBIOS AQUÍ
                 .requestMatchers("/proyectos/nuevo", "/proyectos/nuevo/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/editar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/eliminar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/actualizar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/proyectos/**").authenticated()
-                
-                // Recursos - CAMBIOS AQUÍ
+
                 .requestMatchers("/recursos/recursoNuevo").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/guardar").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/editar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/actualizar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/eliminar/**").hasAnyRole("DIRECTOR", "TRABAJADOR", "SUPERVISOR")
                 .requestMatchers("/recursos/**").authenticated()
-                
+
                 .requestMatchers("/enviarCorreo").permitAll()
-                
-                // Gmail API - requiere autenticación
+
                 .requestMatchers("/api/gmail/**").authenticated()
                 .requestMatchers("/gmail/**").authenticated()
-                // Cualquier otra petición requiere autenticación
+
                 .anyRequest().authenticated()   
             )
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
                 .permitAll()
             )
+
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            // Control de sesiones concurrentes
-            .sessionManagement(session -> session
-                .maximumSessions(1) // Solo 1 sesión activa por usuario
-                .expiredUrl("/login?expired") // URL si la sesión expira
-                .maxSessionsPreventsLogin(false) // Si true: rechaza nuevo login. Si false: cierra sesión anterior
-            )
-            // AGREGAR ESTO: Manejo de errores de acceso
+
+            // ❌ ELIMINADO: esto causaba tu logout
+            // .sessionManagement(...)
+
             .exceptionHandling(exception -> exception
                 .accessDeniedPage("/test-403")
             );

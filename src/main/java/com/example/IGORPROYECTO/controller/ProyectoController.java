@@ -73,16 +73,10 @@ public String guardarProyecto(@ModelAttribute ProyectoDTO proyectoDTO,
         return "Proyectos/menu";
     }
 
-    @GetMapping("/consultar")
+   @GetMapping("/consultar")
 public String consultarProyectos(Model model, Authentication auth) {
 
     List<Proyecto> proyectos = proyectoService.consultarTodos();
-
-    // DEBUG (puedes quitar luego)
-    System.out.println("TOTAL PROYECTOS: " + proyectos.size());
-    proyectos.forEach(p -> System.out.println("Estado: " + p.getEstado()));
-
-    String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
 
     long totalProyectos = proyectos.size();
 
@@ -102,10 +96,16 @@ public String consultarProyectos(Model model, Authentication auth) {
             .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
             .count();
 
+    // 🔒 Manejo seguro del auth
+    String rol = "INVITADO";
+
+    if (auth != null && auth.isAuthenticated() && auth.getAuthorities() != null && !auth.getAuthorities().isEmpty()) {
+        rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+    }
+
     model.addAttribute("proyectos", proyectos);
     model.addAttribute("rol", rol);
 
-    // 👇 SOLO variables directas (sin Map)
     model.addAttribute("totalProyectos", totalProyectos);
     model.addAttribute("activos", activos);
     model.addAttribute("enEjecucion", enEjecucion);

@@ -96,12 +96,7 @@ public String consultarProyectos(Model model, Authentication auth) {
             .filter(p -> "Finalizado".equalsIgnoreCase(p.getEstado()))
             .count();
 
-    // 🔒 Manejo seguro del auth
-    String rol = "INVITADO";
-
-    if (auth != null && auth.isAuthenticated() && auth.getAuthorities() != null && !auth.getAuthorities().isEmpty()) {
-        rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
-    }
+   String rol = auth.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
 
     model.addAttribute("proyectos", proyectos);
     model.addAttribute("rol", rol);
